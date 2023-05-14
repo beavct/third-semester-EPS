@@ -1,18 +1,14 @@
 #include <vector>
 #include <string>
-#include "item.cpp"
+#include "no.h"
 
 using namespace std;
 
-class No{
-    public:
-        string key;
-        Item item;
-        No *fEsq;
-        No *fDir;
-
-        No(string key, Item item);
-        ~No();
+typedef struct No{
+    Item item;
+    string palavra;
+    No* esq;
+    No* dir;
 };
 
 class ABB{
@@ -24,8 +20,8 @@ class ABB{
         ABB();
         ~ABB();
         No* getRaiz();
-        No* setNo(string key, Item item);
+        void daFree(No* raiz);
         void setRaiz(No* raiz);
-        No* insereABB(string key, Item item);
+        No* insereABB(No* raiz, string key, Item item);
         No* buscaABB(No *raiz, string key);
 };
