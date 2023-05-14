@@ -32,26 +32,21 @@ void ARN:: setRaiz(No* raiz){
 }
 
 No* ARN:: rodaEsq(No* raiz){
-    No* auxD = raiz->dir;
-    No* auxE = auxD->esq;
+    No* x = raiz->dir;
+    No* y = x->esq;
+    x->esq = raiz;
+    raiz->dir = y;
 
-    auxD->esq = raiz;
-    raiz->dir = auxE;
-
-    // nova raiz
-    return auxD;
+    return x;
 }
 
 No* ARN:: rodaDir(No* raiz){
-    No* auxE = raiz->esq;
-    No* auxD = auxE->dir;
-
-    auxE->dir = raiz;
-    raiz->esq = auxD;
-
-    // nova raiz
-    return auxE;  
-
+    No* x = raiz->esq;
+    No* y = x->dir;
+    x->dir = raiz;
+    raiz->esq = y;
+        
+    return(x);
 }
 
 No* ARN:: insereARN(No* raiz, string key, Item item){
