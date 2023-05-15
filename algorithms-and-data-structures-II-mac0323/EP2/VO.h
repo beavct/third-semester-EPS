@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 #include "no.h"
 
+#pragma once
+
 using namespace std;
 
 typedef struct{
@@ -20,4 +22,8 @@ class VO{
         int getQntPalavras();
         void insere(string key, Item val);
         Item busca(string key);
+        void inorder();
+        void quickSort(int ini, int fim); // depois que insere tem que fazer o quickSort
+        int particiona(int ini, int fim);
 };
+

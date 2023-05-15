@@ -64,6 +64,19 @@ No* ARN:: insereARN(No* raiz, string key, Item item){
     const char* aux1 = key.c_str();
     const char* aux2 = raiz->palavra.c_str();
 
+    
+
+
+
+
+
+
+
+
+
+
+
+
     // nossa palavra é maior
     if(strcmp(aux1, aux2) > 0){
         raiz->dir = insereARN(raiz->dir, key, item);
@@ -103,4 +116,13 @@ No* ARN:: buscaARN(No *raiz, string key){
     return buscaARN(raiz->dir, key);
 }
 
+void ARN::inorder(No* raiz){
+    
+    if(raiz->esq != nullptr)
+        inorder(raiz->esq);
+    
+    cout << raiz->palavra << endl;
 
+    if(raiz->dir != nullptr)
+        inorder(raiz->dir);
+}

@@ -26,4 +26,5 @@ class TR{
         No* rodaDir(No* raiz);
         No* insereTR(No* raiz, string key, Item item);
         No* buscaTR(No *raiz, string key);
+        void inorder(No* raiz);
 };

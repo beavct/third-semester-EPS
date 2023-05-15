@@ -2,6 +2,8 @@
 #include <string>
 #include "no.h"
 
+#pragma once
+
 using namespace std;
 
 typedef struct No{
@@ -24,4 +26,5 @@ class ABB{
         void setRaiz(No* raiz);
         No* insereABB(No* raiz, string key, Item item);
         No* buscaABB(No *raiz, string key);
+        void inorder(No* raiz);
 };

@@ -64,6 +64,9 @@ No* TR:: insereTR(No* raiz, string key, Item item){
         srand(time(0));
         raiz->prioridade = rand() % INT_MAX;
 
+        if(this->tam == 0)
+            this->raiz = raiz;
+            
         this->tam++;
 
         return raiz;
@@ -113,4 +116,15 @@ No* TR:: buscaTR(No *raiz, string key){
         return buscaTR(raiz->esq, key);
 
     return buscaTR(raiz->dir, key);
+}
+
+void TR::inorder(No* raiz){
+    
+    if(raiz->esq != nullptr)
+        inorder(raiz->esq);
+    
+    cout << raiz->palavra << endl;
+
+    if(raiz->dir != nullptr)
+        inorder(raiz->dir);
 }

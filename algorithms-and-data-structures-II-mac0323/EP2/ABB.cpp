@@ -37,6 +37,10 @@ No* ABB:: insereABB(No* raiz, string key, Item item){
         raiz->palavra = key;
         raiz->item = item;
         raiz->esq = raiz->dir = nullptr;
+
+        if(this->tam == 0)
+            this->raiz = raiz;
+
         this->tam++;
 
         return raiz;
@@ -76,4 +80,15 @@ No* ABB:: buscaABB(No* raiz, string key){
         return buscaABB(raiz->esq, key);
 
     return buscaABB(raiz->dir, key);
+}
+
+void ABB::inorder(No* raiz){
+    
+    if(raiz->esq != nullptr)
+        inorder(raiz->esq);
+    
+    cout << raiz->palavra << endl;
+
+    if(raiz->dir != nullptr)
+        inorder(raiz->dir);
 }

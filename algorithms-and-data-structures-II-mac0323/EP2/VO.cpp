@@ -23,39 +23,70 @@ int VO:: getQntPalavras(){
     return this->qntPalavras;
 }
 
-// vetor ordenado em ordem crescente
+// vetor ordenado em ordem decrescente
 void VO:: insere(string key, Item val){
+
     // pro c++ parar de xiar
     const char *aux1 = key.c_str(); 
 
-    for(int i=0; i < this->qntPalavras; i++){
-        // pro c++ parar de xiar
-        const char *aux2 = this->palavras[i].palavra.c_str();
+    if(this->qntPalavras+1 == this->max)
+        resize();
 
-        // nossa chave ainda é menor
-        if(strcmp(aux1, aux2) < 0) 
-            continue;
-            
-        // nossa palavra é maior
-        else if(strcmp(aux1, aux2) > 0){ 
-            if(this->qntPalavras == this->max)
-                resize();
+    this->palavras[this->qntPalavras].palavra = key;
+    this->palavras[this->qntPalavras].item = val;
+    this->qntPalavras++;
 
-            for(int j = this->qntPalavras - 1; j<=i; j--){
-                this->palavras[j+1]=this->palavras[j];
-            }
-            this->palavras[i].palavra = key;
-            this->palavras[i].item = val;
-            this->qntPalavras++;
-            break;
+}
+
+void VO:: quickSort(int ini, int fim){
+    // base case
+    if (ini >= fim)
+        return;
+ 
+    // partitioning the array
+    int p = particiona(ini, fim);
+ 
+    // Sorting the left part
+    quickSort(ini, p - 1);
+ 
+    // Sorting the right part
+    quickSort(p + 1, fim);
+}
+
+int VO:: particiona(int ini, int fim){
+     
+    Palavras pivot = this->palavras[ini];
+ 
+    int count = 0;
+    for (int i = ini + 1; i <= fim; i++) {
+        if (strcmp(this->palavras[i].palavra.c_str(), pivot.palavra.c_str()) < 0)
+            count++;
+    }
+ 
+    // Giving pivot element its correct position
+    int pivotIndex = ini + count;
+    swap(this->palavras[pivotIndex], this->palavras[ini]);
+ 
+    // Sorting left and right parts of the pivot element
+    int i = ini, j = fim;
+ 
+    while (i < pivotIndex && j > pivotIndex) {
+        
+ 
+        while (strcmp(this->palavras[i].palavra.c_str(), pivot.palavra.c_str()) < 0) {
+            i++;
         }
-
-        // strcmp(key, this->palavras[i].key) == 0
-        else{
-            this->palavras[i].item.qntOcorrencias++;
-            break;
+ 
+        while (strcmp(this->palavras[j].palavra.c_str(), pivot.palavra.c_str()) > 0) {
+            j--;
+        }
+ 
+        if (i < pivotIndex && j > pivotIndex) {
+            swap(this->palavras[i++], this->palavras[j--]);
         }
     }
+ 
+    return pivotIndex;
 }
 
 Item VO:: busca(string key){
@@ -74,4 +105,10 @@ Item VO:: busca(string key){
     return aux;
 }
 
+void VO:: inorder(){
+    cout << this->qntPalavras << endl;
+    
+    for(int i=0; i< this->qntPalavras; i++)
+        cout << this->palavras[i].palavra << endl;
+}
 
