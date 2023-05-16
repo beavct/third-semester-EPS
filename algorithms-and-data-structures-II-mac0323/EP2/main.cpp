@@ -3,7 +3,7 @@
 // #include "VO.h" // a estrutura básica ta ok
 // #include "ABB.h" // a estrutura básica ta ok
 // #include "TR.h" // a estrutura básica ta ok
-// #include "ARN.h"
+#include "ARN.h"
 // #include "A23.h"
 
 using namespace std;
@@ -47,6 +47,7 @@ int contaVogais(string s){
 
 int main(){
     // instância os objetos
+    ARN arvoreRN;
 
     // lê entrada do arquivo indicado
     int nPalavras, nConsultas;
@@ -78,6 +79,7 @@ int main(){
         aux.nVogais = contaVogais(palavra);
 
         // insere
+        arvoreRN.insereARN(arvoreRN.getRaiz(), palavra, aux);
     }
 
     // lê e coloca na estrutura correta
@@ -86,5 +88,7 @@ int main(){
     file.close();
 
     // printa na ordem 
+    arvoreRN.inorder(arvoreRN.getRaiz());
+
     return 0;
 }

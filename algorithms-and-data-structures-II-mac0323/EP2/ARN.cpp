@@ -33,73 +33,66 @@ void ARN:: setRaiz(No* raiz){
 
 No* ARN:: rodaEsq(No* raiz){
     No* x = raiz->dir;
-    No* y = x->esq;
+    raiz->dir = x->esq;
     x->esq = raiz;
-    raiz->dir = y;
-
+    x->cor = raiz->cor;
+    raiz->cor = 0; // vermelho
+    // atualizou o tamanho das subárvores
     return x;
 }
 
 No* ARN:: rodaDir(No* raiz){
     No* x = raiz->esq;
-    No* y = x->dir;
+    raiz->esq = x->dir;
     x->dir = raiz;
-    raiz->esq = y;
-        
-    return(x);
+    x->cor = raiz->cor;
+    raiz->cor = 0; // vermelho
+    // atualizou o tamanho das subárvores
+    return x;
+}
+
+void ARN:: trocaCores(No* raiz){
+    raiz->cor = 0; // vermelho
+    raiz->esq->cor = raiz->dir->cor = 1; // preto
 }
 
 No* ARN:: insereARN(No* raiz, string key, Item item){
+
+    // inserção na folha
     if(raiz == nullptr){
         raiz = (No*)malloc(sizeof(No));
         raiz->palavra = key;
         raiz->item = item;
         raiz->esq = raiz->dir = nullptr;
-        raiz->cor = 0; // sempre insere como vermelho
+        raiz->cor = 1; // preto
+
+        if(this->tam == 0)
+            this->raiz = raiz;
+
         this->tam++;
 
         return raiz;
     }
 
-    const char* aux1 = key.c_str();
-    const char* aux2 = raiz->palavra.c_str();
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-    // nossa palavra é maior
-    if(strcmp(aux1, aux2) > 0){
-        raiz->dir = insereARN(raiz->dir, key, item);
-
-
-
-        return raiz;
-    }
-
-    // nossa palavra é menor
-    else if(strcmp(aux1, aux2) < 0){
+    if(strcmp(key.c_str(), raiz->palavra.c_str()) < 0)
         raiz->esq = insereARN(raiz->esq, key, item);
 
-        // não fiz a putaria de vermelho preto e os caraio
+    else if(strcmp(key.c_str(), raiz->palavra.c_str()) > 0)
+        raiz->dir = insereARN(raiz->dir, key, item);
 
-        return raiz;
-    }
-
-    else{ // as duas palavras são iguais 
+    else 
         raiz->item.qntOcorrencias++;
-        return raiz;
+
+    if(raiz->esq != nullptr && raiz->dir != nullptr){
+        if(raiz->dir->cor == 0 && raiz->esq->cor == 1)
+            raiz = rodaEsq(raiz);
+        if(raiz->esq->cor == 0 && raiz->esq->esq == 0)
+            raiz = rodaDir(raiz);
+        if(raiz->esq->cor == 0 && raiz->dir->cor == 0)
+            trocaCores(raiz);
     }
 
+    return raiz;
 }
 
 No* ARN:: buscaARN(No *raiz, string key){

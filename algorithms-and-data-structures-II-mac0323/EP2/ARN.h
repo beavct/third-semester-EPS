@@ -28,4 +28,5 @@ class ARN{
         No* insereARN(No* raiz, string key, Item item);
         No* buscaARN(No *raiz, string key);
         void inorder(No* raiz);
+        void trocaCores(No* raiz);
 };
