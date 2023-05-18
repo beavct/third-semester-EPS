@@ -29,4 +29,6 @@ class TR{
         Item buscaTR(NoTR *raiz, string key);
         void inorder(NoTR* raiz);
         void add(string key, Item val);
+        void imprime();
+        Item busca(string key);
 };

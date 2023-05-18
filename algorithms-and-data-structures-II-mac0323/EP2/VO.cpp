@@ -25,13 +25,24 @@ int VO:: getQntPalavras(){
 }
 
 void VO:: insere(string key, Item val){
+    int flag=0;
 
-    if(this->qntPalavras+1 == this->max)
-        resize();
+    for(int i=0; i<this->qntPalavras; i++){
+        if(this->palavras[i].palavra == key){
+            this->palavras[i].item.qntOcorrencias++;
+            flag=1;
+            break;
+        }
+    }
 
-    this->palavras[this->qntPalavras].palavra = key;
-    this->palavras[this->qntPalavras].item = val;
-    this->qntPalavras++;
+    if(!flag){
+        if(this->qntPalavras+1 == this->max)
+            resize();
+
+        this->palavras[this->qntPalavras].palavra = key;
+        this->palavras[this->qntPalavras].item = val;
+        this->qntPalavras++;
+    }
 
 }
 
@@ -122,9 +133,16 @@ void VO:: add(string key, Item val){
 }
 
 void VO:: inorder(){
-    cout << this->qntPalavras << endl;
+    //cout << this->qntPalavras << endl;
     
-    for(int i=0; i< this->qntPalavras; i++)
-        cout << this->palavras[i].palavra << endl;
+    for(int i=0; i< this->qntPalavras; i++){
+        cout << this->palavras[i].palavra << " " << this->palavras[i].item.qntOcorrencias << endl;
+        //cout << this->palavras[i].palavra << endl;
+    }
 }
+
+void VO:: imprime(){
+    this->inorder();
+}
+
 

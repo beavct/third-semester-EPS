@@ -38,4 +38,6 @@ class A23{
         int ehFolha(NoA23* raiz);
         NoA23* ajudaInserir(NoA23* raiz, NoA23* novo);
         void viz(NoA23* node);
+        void imprime();
+        Item busca(string key);
 };

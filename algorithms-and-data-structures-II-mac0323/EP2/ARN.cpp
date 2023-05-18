@@ -25,7 +25,7 @@ void ARN:: daFree(NoARN* raiz){
     if(raiz->dir != nullptr)
         daFree(raiz->dir);
 
-    free(raiz);
+    delete(raiz);
 }
 
 void ARN:: setRaiz(NoARN* raiz){
@@ -61,7 +61,7 @@ NoARN* ARN:: insereARN(NoARN* raiz, string key, Item item){
 
     // inserção na folha
     if(raiz == nullptr){
-        raiz = (NoARN*)malloc(sizeof(NoARN));
+        raiz = new NoARN();
         raiz->palavra = key;
         raiz->item = item;
         raiz->esq = raiz->dir = nullptr;
@@ -128,8 +128,18 @@ void ARN::inorder(NoARN* raiz){
     if(raiz->esq != nullptr)
         inorder(raiz->esq);
     
-    cout << raiz->palavra << endl;
+    cout << raiz->palavra << " " << raiz->item.qntOcorrencias << endl;
+    //cout << raiz->palavra << endl;
+
 
     if(raiz->dir != nullptr)
         inorder(raiz->dir);
+}
+
+void ARN:: imprime(){
+    this->inorder(this->raiz);
+}
+
+Item ARN:: busca(string key){
+    return this->buscaARN(this->raiz, key);  
 }

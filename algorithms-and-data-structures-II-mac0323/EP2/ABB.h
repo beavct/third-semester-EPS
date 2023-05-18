@@ -28,4 +28,6 @@ class ABB{
         Item buscaABB(NoABB *raiz, string key);
         void inorder(NoABB* raiz);
         void add(string key, Item val);
+        void imprime();
+        Item busca(string key);
 };

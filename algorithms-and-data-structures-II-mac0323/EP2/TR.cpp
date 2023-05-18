@@ -11,7 +11,7 @@ TR:: TR(){
 }
 
 TR:: ~TR(){
-    daFree(this->raiz);
+    delete(this->raiz);
 }
 
 void TR:: daFree(NoTR* raiz){
@@ -57,7 +57,7 @@ NoTR* TR:: rodaDir(NoTR* raiz){
 
 NoTR* TR:: insereTR(NoTR* raiz, string key, Item item){
     if(raiz == nullptr){
-        raiz = (NoTR*)malloc(sizeof(NoTR));
+        raiz = new NoTR();
         raiz->palavra = key;
         raiz->item = item;
         raiz->esq = raiz->dir = nullptr;
@@ -136,8 +136,17 @@ void TR::inorder(NoTR* raiz){
     if(raiz->esq != nullptr)
         inorder(raiz->esq);
     
-    cout << raiz->palavra << endl;
+    cout << raiz->palavra << " " << raiz->item.qntOcorrencias << endl;
+    //cout << raiz->palavra << endl;
 
     if(raiz->dir != nullptr)
         inorder(raiz->dir);
+}
+
+void TR:: imprime(){
+    this->inorder(this->raiz);
+}
+
+Item TR:: busca(string key){
+    return this->buscaTR(this->raiz, key);
 }

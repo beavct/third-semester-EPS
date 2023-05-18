@@ -27,5 +27,6 @@ class VO{
         void quickSort(int ini, int fim); // depois que insere tem que fazer o quickSort
         int particiona(int ini, int fim);
         void add(string key, Item val);
+        void imprime();
 };
 

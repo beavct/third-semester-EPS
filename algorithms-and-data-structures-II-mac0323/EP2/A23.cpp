@@ -27,7 +27,7 @@ void A23:: daFree(NoA23* raiz){
     if(raiz->dir != nullptr)
         daFree(raiz->dir);
 
-    free(raiz);
+    delete(raiz);
 }
 
 NoA23* A23:: getRaiz(){
@@ -39,7 +39,7 @@ void A23:: setRaiz(NoA23* raiz){
 }
 
 NoA23* A23:: criaNo(string key, Item item){
-    NoA23* z = (NoA23*)malloc(sizeof(NoA23));
+    NoA23* z = new NoA23();
 
     //z->pai = pai;
     z->palavra1 = key;
@@ -61,7 +61,7 @@ int A23:: ehFolha(NoA23* raiz){
 NoA23* A23:: insereA23(NoA23* raiz, string key, Item item){
     // árvore vazia
     if(raiz == nullptr){
-        raiz = (NoA23*)malloc(sizeof(NoA23));
+        raiz = new NoA23();
         raiz->palavra1 = key;
         raiz->item1 = item;
         raiz->esq = raiz->dir = raiz->meio = nullptr;
@@ -343,3 +343,11 @@ void A23:: viz(NoA23* node)
     if(raiz->dir != nullptr)
         inorder(raiz->dir);
 }*/
+
+void A23:: imprime(){
+    this->inorder(this->raiz);
+}
+
+Item A23:: busca(string key){
+    return this->buscaA23(this->raiz, key);
+}

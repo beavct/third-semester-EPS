@@ -19,7 +19,7 @@ void ABB:: daFree(NoABB* raiz){
     if(raiz->dir != nullptr)
         daFree(raiz->dir);
 
-    free(raiz);
+    delete(raiz);
 }
 
 NoABB* ABB:: getRaiz(){
@@ -34,7 +34,7 @@ NoABB* ABB:: insereABB(NoABB* raiz, string key, Item item){
 
     // inserção na folha
     if(raiz == nullptr){
-        raiz = (NoABB*)malloc(sizeof(NoABB));
+        raiz = new NoABB();
         raiz->palavra = key;
         raiz->item = item;
         raiz->esq = raiz->dir = nullptr;
@@ -100,8 +100,17 @@ void ABB::inorder(NoABB* raiz){
     if(raiz->esq != nullptr)
         inorder(raiz->esq);
     
-    cout << raiz->palavra << endl;
+    cout << raiz->palavra << " " << raiz->item.qntOcorrencias << endl;
+    //cout << raiz->palavra << endl;
 
     if(raiz->dir != nullptr)
         inorder(raiz->dir);
+}
+
+void ABB:: imprime(){
+    this->inorder(this->raiz);
+}
+
+Item ABB:: busca(string key){
+    return this->buscaABB(this->raiz, key);
 }

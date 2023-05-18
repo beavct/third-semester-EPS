@@ -31,4 +31,6 @@ class ARN{
         void inorder(NoARN* raiz);
         void trocaCores(NoARN* raiz);
         void add(string key, Item val);
+        void imprime();
+        Item busca(string key);
 };
