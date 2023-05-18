@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string.h>
 #include "no.h"
 #include "ARN.h"
 
@@ -13,11 +14,11 @@ ARN:: ~ARN(){
     daFree(this->raiz);
 }
 
-No* ARN:: getRaiz(){
+NoARN* ARN:: getRaiz(){
     return this->raiz;
 }
 
-void ARN:: daFree(No* raiz){
+void ARN:: daFree(NoARN* raiz){
     if(raiz->esq != nullptr)
         daFree(raiz->esq);
     
@@ -27,12 +28,12 @@ void ARN:: daFree(No* raiz){
     free(raiz);
 }
 
-void ARN:: setRaiz(No* raiz){
+void ARN:: setRaiz(NoARN* raiz){
     this->raiz = raiz;
 }
 
-No* ARN:: rodaEsq(No* raiz){
-    No* x = raiz->dir;
+NoARN* ARN:: rodaEsq(NoARN* raiz){
+    NoARN* x = raiz->dir;
     raiz->dir = x->esq;
     x->esq = raiz;
     x->cor = raiz->cor;
@@ -41,8 +42,8 @@ No* ARN:: rodaEsq(No* raiz){
     return x;
 }
 
-No* ARN:: rodaDir(No* raiz){
-    No* x = raiz->esq;
+NoARN* ARN:: rodaDir(NoARN* raiz){
+    NoARN* x = raiz->esq;
     raiz->esq = x->dir;
     x->dir = raiz;
     x->cor = raiz->cor;
@@ -51,16 +52,16 @@ No* ARN:: rodaDir(No* raiz){
     return x;
 }
 
-void ARN:: trocaCores(No* raiz){
+void ARN:: trocaCores(NoARN* raiz){
     raiz->cor = 0; // vermelho
     raiz->esq->cor = raiz->dir->cor = 1; // preto
 }
 
-No* ARN:: insereARN(No* raiz, string key, Item item){
+NoARN* ARN:: insereARN(NoARN* raiz, string key, Item item){
 
     // inserção na folha
     if(raiz == nullptr){
-        raiz = (No*)malloc(sizeof(No));
+        raiz = (NoARN*)malloc(sizeof(NoARN));
         raiz->palavra = key;
         raiz->item = item;
         raiz->esq = raiz->dir = nullptr;
@@ -95,13 +96,26 @@ No* ARN:: insereARN(No* raiz, string key, Item item){
     return raiz;
 }
 
-No* ARN:: buscaARN(No *raiz, string key){
-    No* raizAux = raiz;
+void ARN:: add(string key, Item val){
+    this->insereARN(this->raiz, key, val);
+}
+
+Item ARN:: buscaARN(NoARN *raiz, string key){
+    NoARN* raizAux = raiz;
     const char* aux1 = key.c_str();
     const char* aux2 = raizAux->palavra.c_str();
 
-    if(raiz == nullptr || strcmp(aux1, aux2) == 0)
-        return raiz;
+    if(raiz == nullptr){
+        // se não está na tabela de símbolos
+        Item aux;
+        aux.nVogais=-1;
+        aux.qntOcorrencias=-1;
+        aux.tam=-1;
+        return aux;
+    }
+
+    if(strcmp(aux1, aux2) == 0)
+        return raiz->item;
 
     if(strcmp(aux1, aux2) < 0)
         return buscaARN(raiz->esq, key);
@@ -109,7 +123,7 @@ No* ARN:: buscaARN(No *raiz, string key){
     return buscaARN(raiz->dir, key);
 }
 
-void ARN::inorder(No* raiz){
+void ARN::inorder(NoARN* raiz){
     
     if(raiz->esq != nullptr)
         inorder(raiz->esq);

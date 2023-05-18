@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string.h>
 #include "no.h"
 #include "ABB.h"
 
@@ -11,7 +12,7 @@ ABB:: ~ABB(){
     daFree(this->raiz);
 }
 
-void ABB:: daFree(No* raiz){
+void ABB:: daFree(NoABB* raiz){
     if(raiz->esq != nullptr)
         daFree(raiz->esq);
     
@@ -21,19 +22,19 @@ void ABB:: daFree(No* raiz){
     free(raiz);
 }
 
-No* ABB:: getRaiz(){
+NoABB* ABB:: getRaiz(){
     return this->raiz;
 }
 
-void ABB:: setRaiz(No* raiz){
+void ABB:: setRaiz(NoABB* raiz){
     this->raiz = raiz;
 }
 
-No* ABB:: insereABB(No* raiz, string key, Item item){
+NoABB* ABB:: insereABB(NoABB* raiz, string key, Item item){
 
     // inserção na folha
     if(raiz == nullptr){
-        raiz = (No*)malloc(sizeof(No));
+        raiz = (NoABB*)malloc(sizeof(NoABB));
         raiz->palavra = key;
         raiz->item = item;
         raiz->esq = raiz->dir = nullptr;
@@ -68,13 +69,21 @@ No* ABB:: insereABB(No* raiz, string key, Item item){
     }
 }
 
-No* ABB:: buscaABB(No* raiz, string key){
-    No* raizAux = raiz;
+Item ABB:: buscaABB(NoABB* raiz, string key){
     const char* aux1 = key.c_str();
-    const char* aux2 = raizAux->palavra.c_str();
+    const char* aux2 = raiz->palavra.c_str();
 
-    if(raiz == nullptr || strcmp(aux1, aux2) == 0)
-        return raiz;
+    if(raiz == nullptr){
+        // se não está na tabela de símbolos
+        Item aux;
+        aux.nVogais=-1;
+        aux.qntOcorrencias=-1;
+        aux.tam=-1;
+        return aux;
+    }
+
+    if(strcmp(aux1, aux2) == 0)
+        return raiz->item;
 
     if(strcmp(aux1, aux2) < 0)
         return buscaABB(raiz->esq, key);
@@ -82,7 +91,11 @@ No* ABB:: buscaABB(No* raiz, string key){
     return buscaABB(raiz->dir, key);
 }
 
-void ABB::inorder(No* raiz){
+void ABB:: add(string key, Item val){
+    this->insereABB(this->raiz, key, val);
+}
+
+void ABB::inorder(NoABB* raiz){
     
     if(raiz->esq != nullptr)
         inorder(raiz->esq);

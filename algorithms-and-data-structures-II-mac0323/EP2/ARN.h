@@ -1,32 +1,34 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 #include "no.h"
 
 using namespace std;
 
-typedef struct No{
+struct NoARN{
     Item item;
     string palavra;
     int cor; 
     // 1: preto
     // 0: vermelho
-    No* esq;
-    No* dir;
+    NoARN* esq;
+    NoARN* dir;
 };
 
 class ARN{
     protected:
         int tam;
-        No* raiz;
+        NoARN* raiz;
     public:
         ARN();
         ~ARN();
-        No* getRaiz();
-        void daFree(No* raiz);
-        void setRaiz(No* raiz);
-        No* rodaEsq(No* raiz);
-        No* rodaDir(No* raiz);
-        No* insereARN(No* raiz, string key, Item item);
-        No* buscaARN(No *raiz, string key);
-        void inorder(No* raiz);
-        void trocaCores(No* raiz);
+        NoARN* getRaiz();
+        void daFree(NoARN* raiz);
+        void setRaiz(NoARN* raiz);
+        NoARN* rodaEsq(NoARN* raiz);
+        NoARN* rodaDir(NoARN* raiz);
+        NoARN* insereARN(NoARN* raiz, string key, Item item);
+        Item buscaARN(NoARN *raiz, string key);
+        void inorder(NoARN* raiz);
+        void trocaCores(NoARN* raiz);
+        void add(string key, Item val);
 };

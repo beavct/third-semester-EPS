@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string.h>
 #include "no.h"
 #include "VO.h"
 
@@ -23,11 +24,7 @@ int VO:: getQntPalavras(){
     return this->qntPalavras;
 }
 
-// vetor ordenado em ordem decrescente
 void VO:: insere(string key, Item val){
-
-    // pro c++ parar de xiar
-    const char *aux1 = key.c_str(); 
 
     if(this->qntPalavras+1 == this->max)
         resize();
@@ -90,12 +87,27 @@ int VO:: particiona(int ini, int fim){
 }
 
 Item VO:: busca(string key){
-    for(int i = 0; i < this->qntPalavras; i++){
+    int inicio = 0, fim = this->qntPalavras - 1;
+
+    // busca binária
+    while(inicio <= fim){
+        int meio = (inicio + fim) / 2;
+
+        if(strcmp(this->palavras[meio].palavra.c_str(), key.c_str()) == 0)
+            return this->palavras[meio].item;
+
+        if(strcmp(this->palavras[meio].palavra.c_str(), key.c_str()) > 0)
+            fim = meio - 1;
+        
+        if(strcmp(this->palavras[meio].palavra.c_str(), key.c_str()) < 0)
+            inicio = meio + 1;
+    }
+
+    /*for(int i = 0; i < this->qntPalavras; i++){
         if(this->palavras[i].palavra == key){
             return this->palavras[i].item;
-            break;
         }
-    }
+    }*/
 
     // se não está na tabela de símbolos
     Item aux;
@@ -103,6 +115,10 @@ Item VO:: busca(string key){
     aux.qntOcorrencias=-1;
     aux.tam=-1;
     return aux;
+}
+
+void VO:: add(string key, Item val){
+    this->insere(key, val);
 }
 
 void VO:: inorder(){

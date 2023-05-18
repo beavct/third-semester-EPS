@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string.h>
 #include "no.h"
 #include "TR.h"
 
@@ -13,7 +14,7 @@ TR:: ~TR(){
     daFree(this->raiz);
 }
 
-void TR:: daFree(No* raiz){
+void TR:: daFree(NoTR* raiz){
     if(raiz->esq != nullptr)
         daFree(raiz->esq);
     
@@ -23,17 +24,17 @@ void TR:: daFree(No* raiz){
     free(raiz);
 }
 
-No* TR:: getRaiz(){
+NoTR* TR:: getRaiz(){
     return this->raiz;
 }
 
-void TR:: setRaiz(No* raiz){
+void TR:: setRaiz(NoTR* raiz){
     this->raiz = raiz;
 }
 
-No* TR:: rodaEsq(No* raiz){
-    No* auxD = raiz->dir;
-    No* auxE = auxD->esq;
+NoTR* TR:: rodaEsq(NoTR* raiz){
+    NoTR* auxD = raiz->dir;
+    NoTR* auxE = auxD->esq;
 
     auxD->esq = raiz;
     raiz->dir = auxE;
@@ -42,9 +43,9 @@ No* TR:: rodaEsq(No* raiz){
     return auxD;
 }
 
-No* TR:: rodaDir(No* raiz){
-    No* auxE = raiz->esq;
-    No* auxD = auxE->dir;
+NoTR* TR:: rodaDir(NoTR* raiz){
+    NoTR* auxE = raiz->esq;
+    NoTR* auxD = auxE->dir;
 
     auxE->dir = raiz;
     raiz->esq = auxD;
@@ -54,15 +55,15 @@ No* TR:: rodaDir(No* raiz){
 
 }
 
-No* TR:: insereTR(No* raiz, string key, Item item){
+NoTR* TR:: insereTR(NoTR* raiz, string key, Item item){
     if(raiz == nullptr){
-        raiz = (No*)malloc(sizeof(No));
+        raiz = (NoTR*)malloc(sizeof(NoTR));
         raiz->palavra = key;
         raiz->item = item;
         raiz->esq = raiz->dir = nullptr;
 
         srand(time(0));
-        raiz->prioridade = rand() % INT_MAX;
+        raiz->prioridade = rand() % INT64_MAX;
 
         if(this->tam == 0)
             this->raiz = raiz;
@@ -104,13 +105,21 @@ No* TR:: insereTR(No* raiz, string key, Item item){
 
 }
 
-No* TR:: buscaTR(No *raiz, string key){
-    No* raizAux = raiz;
+Item TR:: buscaTR(NoTR *raiz, string key){
     const char* aux1 = key.c_str();
-    const char* aux2 = raizAux->palavra.c_str();
+    const char* aux2 = raiz->palavra.c_str();
 
-    if(raiz == nullptr || strcmp(aux1, aux2) == 0)
-        return raiz;
+    if(raiz == nullptr){
+        // se não está na tabela de símbolos
+        Item aux;
+        aux.nVogais=-1;
+        aux.qntOcorrencias=-1;
+        aux.tam=-1;
+        return aux;
+    }
+
+    if(strcmp(aux1, aux2) == 0)
+        return raiz->item;
 
     if(strcmp(aux1, aux2) < 0)
         return buscaTR(raiz->esq, key);
@@ -118,7 +127,11 @@ No* TR:: buscaTR(No *raiz, string key){
     return buscaTR(raiz->dir, key);
 }
 
-void TR::inorder(No* raiz){
+void TR:: add(string key, Item val){
+    this->insereTR(this->raiz, key, val);
+}
+
+void TR::inorder(NoTR* raiz){
     
     if(raiz->esq != nullptr)
         inorder(raiz->esq);

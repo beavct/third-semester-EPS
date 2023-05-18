@@ -1,10 +1,8 @@
-#include <string>
-
 #pragma once
 
 using namespace std;
 
-typedef struct Item {
+struct Item {
     int qntOcorrencias;
     int nVogais;
     int tam;

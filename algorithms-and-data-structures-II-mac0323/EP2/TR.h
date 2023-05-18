@@ -1,30 +1,32 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 #include "no.h"
 
 using namespace std;
 
-typedef struct No{
+struct NoTR{
     Item item;
     string palavra;
     int prioridade;
-    No* esq;
-    No* dir;
+    NoTR* esq;
+    NoTR* dir;
 };
 
 class TR{
     protected:
         int tam;
-        No* raiz;
+        NoTR* raiz;
 
     public:
         TR();
         ~TR();
-        No* getRaiz();
-        void daFree(No* raiz);
-        void setRaiz(No* raiz);
-        No* rodaEsq(No* raiz);
-        No* rodaDir(No* raiz);
-        No* insereTR(No* raiz, string key, Item item);
-        No* buscaTR(No *raiz, string key);
-        void inorder(No* raiz);
+        NoTR* getRaiz();
+        void daFree(NoTR* raiz);
+        void setRaiz(NoTR* raiz);
+        NoTR* rodaEsq(NoTR* raiz);
+        NoTR* rodaDir(NoTR* raiz);
+        NoTR* insereTR(NoTR* raiz, string key, Item item);
+        Item buscaTR(NoTR *raiz, string key);
+        void inorder(NoTR* raiz);
+        void add(string key, Item val);
 };

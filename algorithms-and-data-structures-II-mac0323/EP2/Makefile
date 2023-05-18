@@ -20,5 +20,5 @@ A23.o: A23.h
 main.o: main.cpp
 
 ep: ${OBJS}
-		${PP} ${COMPFLAGS} -o ep1 ${MAIN} ${OTHERS}
+		${PP} ${COMPFLAGS} -o ep2 ${MAIN} ${OTHERS}
 		@rm -rf *.o 

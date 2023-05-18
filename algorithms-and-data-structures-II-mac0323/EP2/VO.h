@@ -1,11 +1,12 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 #include "no.h"
 
 #pragma once
 
 using namespace std;
 
-typedef struct{
+typedef struct {
     Item item;
     string palavra;
 }Palavras;
@@ -25,5 +26,6 @@ class VO{
         void inorder();
         void quickSort(int ini, int fim); // depois que insere tem que fazer o quickSort
         int particiona(int ini, int fim);
+        void add(string key, Item val);
 };
 
