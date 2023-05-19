@@ -175,25 +175,6 @@ int main(){
 
 
         // cuida das menores palavras com mais vogaus sem repetição - FUNÇÃO VD
-       // se a palavra n repete vogal e tem a mesma quantidade ou mais vogais
-       /*
-       if(nRepeteVogal(palavra) && auxItem.nVogais >= menoresComMaisVogais.aux1){
-                menoresComMaisVogais.palavras.clear();
-                menoresComMaisVogais.palavras.push_back(palavra);
-                menoresComMaisVogais.aux2 = auxItem.tam;
-                menoresComMaisVogais.aux1 = auxItem.nVogais;   
-       }
-        else if(nRepeteVogal(palavra) && auxItem.tam == menoresComMaisVogais.aux2 && auxItem.nVogais == menoresComMaisVogais.aux1){
-            int flagMenor=1;
-            for(int i=0; i<(int)maioresSemRepeticao.palavras.size();i++)
-                if(maioresSemRepeticao.palavras[i] == palavra){
-                    flagMenor = 0;            
-                    break;
-                }
-            if(flagMenor)
-                menoresComMaisVogais.palavras.push_back(palavra);
-        }
-        */
        // se n repete vogais e tem a msm quantidade ou mais
        if(nRepeteVogal(palavra) && auxItem.nVogais >= menoresComMaisVogais.aux1){
             // se tem o mesmo tamanho da palavra e a msm quantidade de vogais
@@ -284,7 +265,7 @@ int main(){
     }
 
     // imprime as palavras e frequências das estrutruturas
-    /*
+    
     if(estrut == "VO")
         vetorOrdenado->imprime();
     else if(estrut == "ABB")
@@ -295,7 +276,7 @@ int main(){
         arvoreRN->imprime();
     else // A23
         arvore23->imprime();
-    */
+    
 
     file.close();
 

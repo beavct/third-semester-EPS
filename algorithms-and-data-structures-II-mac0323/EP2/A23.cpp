@@ -71,33 +71,38 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
         return raiz;
     } 
 
-    // se é uma folha pode inserir
-    if(ehFolha(raiz)){
+    // se a palavra já está no nó
+    // palavra1 == key  
+    if(strcmp(raiz->palavra1.c_str(), key.c_str()) == 0){
+        raiz->item1.qntOcorrencias++;
+        *cresceu = false;
+        return raiz;
+    }
 
-        // se a palavra já está no nó
-        // palavra1 == key  
-        if(strcmp(raiz->palavra1.c_str(), key.c_str()) == 0){
-            raiz->item1.qntOcorrencias++;
+        // palavra2 == key
+    if(raiz->tresNo)
+        if(strcmp(raiz->palavra2.c_str(), key.c_str()) == 0){
+            raiz->item2.qntOcorrencias++;
             *cresceu = false;
             return raiz;
         }
 
-        // palavra2 == key
-        if(raiz->tresNo)
-            if(strcmp(raiz->palavra2.c_str(), key.c_str()) == 0){
-                raiz->item2.qntOcorrencias++;
-                *cresceu = false;
-                return raiz;
-            }
+    // se é uma folha pode inserir
+    if(ehFolha(raiz)){
 
         // a raiz só tem uma palavra, então podemos encaixar a key
         if(!(raiz->tresNo)){
+            // key < palavra1 -> troca
             if(strcmp(raiz->palavra1.c_str(), key.c_str()) < 0){
-                raiz->palavra2 = key;
-                raiz->item2 = item;
+                raiz->palavra2 = raiz->palavra1;
+                raiz->item2 = raiz->item1;
+
+                raiz->palavra1 = key;
+                raiz->item1 = item;
+
                 this->tam++;
             }
-
+            // palavra1 <
             else{
                 raiz->palavra2 = key;
                 raiz->item2 = item;
@@ -110,7 +115,10 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
             return raiz;
         }
 
-        else{ // nossa raiz já possui duas palavras
+        // nossa raiz já possui duas palavras
+        else{ 
+            // a raiz guarda sempre o menor valor
+
             // adiciona à esquerda
             // key < palavra1 < palavra2
             if(strcmp(raiz->palavra1.c_str(), key.c_str()) > 0){
@@ -118,7 +126,8 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
                 NoA23* meio = criaNo(raiz->palavra1, raiz->item1);
 
                 raiz->palavra1 = key;
-                raiz->palavra2 = nullptr;
+                raiz->item1 = item;
+                //raiz->palavra2 = nullptr;
                 raiz->tresNo = false;
 
                 meio->meio = maior;
@@ -129,13 +138,14 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
 
                 return meio;
             }
+
             // adicionar no centro
             // palavra1 < key < palavra2
-            if(strcmp(raiz->palavra2.c_str(), key.c_str()) > 0){
+            else if(strcmp(raiz->palavra2.c_str(), key.c_str()) > 0){
                 NoA23* maior = criaNo(raiz->palavra2, raiz->item2);
                 NoA23* meio = criaNo(key, item);
 
-                raiz->palavra2 = nullptr;
+                //raiz->palavra2 = nullptr;
                 raiz->tresNo = false;
 
                 meio->esq = raiz;
@@ -150,10 +160,10 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
             // adiciona à direita
             // palavra1 < palavra2 < key
             else{
-                NoA23* meio = criaNo(raiz->palavra2, raiz->item2);
                 NoA23* maior = criaNo(key, item);
+                NoA23* meio = criaNo(raiz->palavra2, raiz->item2);
 
-                raiz->palavra2 = nullptr;
+                //raiz->palavra2 = nullptr;
                 raiz->tresNo = false;
 
                 meio->esq = raiz;
@@ -166,7 +176,6 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
             }
 
         }
-        
     }
 
     // não é folha
@@ -177,12 +186,14 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
             NoA23* aux = insereA23(raiz->esq, key, item, cresceu);
 
             if(!*cresceu){
+                // se não cresceu, o raiz->esq só virou três nó
                 raiz->esq = aux;
-                delete(aux);
+                //delete(aux);
                 return raiz;
             }
             else{
                 // a raiz tem apenas uma chave, então dá para encaixar outra 
+                // como inserimos a esquerda, então o valor que temos em aux é menor do que o da raiz
                 if(!raiz->tresNo){
                     raiz->palavra2 = raiz->palavra1;
                     raiz->item2 = raiz->item1;
@@ -194,31 +205,34 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
                     raiz->meio = aux->meio;
                     raiz->esq = aux->esq;
 
+                    raiz->tresNo = true;
+                    *cresceu = false;
 
-                    delete(aux);
+                    //delete(aux);
                     return raiz;
                 }
+
+                // nossa raiz é três nó
+                // entendi mais ou menos
+                // a primeira chave da raiz é maior do que a chava do aux
                 else{
-                    NoA23* menor = aux;
                     NoA23* maior = criaNo(raiz->palavra2, raiz->item2);
+                    NoA23* menor = aux;
 
                     maior->esq = raiz->meio;
                     maior->meio = raiz->dir;
 
-                    raiz->palavra2 = nullptr;
+                    //raiz->palavra2 = nullptr;
                     raiz->tresNo = false;
                     raiz->esq = menor;
                     raiz->meio = maior;
                     raiz->dir = nullptr;
                     *cresceu = true;
 
-
                     return raiz;
 
                 }
             }
-
-
         }
 
         else{
@@ -228,7 +242,7 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
 
                 if(!*cresceu){
                     raiz->meio = aux;
-                    raiz->dir = aux;
+                    return raiz;
                 }
                 else{
                     raiz->palavra2 = aux->palavra1;
@@ -239,7 +253,7 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
                     raiz->meio = aux->esq;
 
                     *cresceu = false;
-                    delete(aux);
+                    //delete(aux);
 
                     return raiz;
                 }
@@ -247,7 +261,7 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
             }
             else{
                 // a raiz já tem duas chaves
-                // palavra1 < pavra2 < key
+                // palavra1 < palavra2 < key
                 if(strcmp(raiz->palavra2.c_str(), key.c_str()) < 0){
                     NoA23* aux = insereA23(raiz->dir, key, item, cresceu);
 
@@ -260,7 +274,7 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
                         NoA23* maior = aux;
                         NoA23* meio = criaNo(raiz->palavra2, raiz->item2);
 
-                        raiz->palavra2 = nullptr;
+                        //raiz->palavra2 = nullptr;
                         raiz->dir = nullptr;
                         raiz->tresNo = false;
 
@@ -269,7 +283,7 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
 
                         *cresceu=true;
 
-                        delete(aux);
+                        //delete(aux);
 
                         return meio;
                     }
@@ -281,24 +295,25 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
 
                     if(!*cresceu){
                         raiz->meio = aux;
-                        delete(aux);
+                        //delete(aux);
                         return raiz;
                     }
                     else{
-                        NoA23* meio = aux;
                         NoA23* maior = criaNo(raiz->palavra2, raiz->item2);
-                        delete(aux);
+                        NoA23* meio = aux;
+                        //delete(aux);
 
                         maior->meio = raiz->dir;
                         maior->esq = meio->meio;
 
-                        raiz->palavra2 = nullptr;
+                        //raiz->palavra2 = nullptr;
                         raiz->dir = nullptr;
-                        raiz->tresNo = false;
                         raiz->meio = meio->esq;
 
                         meio->esq = raiz;
                         meio->meio = maior;
+
+                        raiz->tresNo = false;
 
                         *cresceu=true;
                         return meio;
@@ -314,8 +329,6 @@ Item A23:: buscaA23(NoA23* raiz, string key){
     
     // acho que ta certo
     const char* aux1 = key.c_str();
-    const char* aux2 = raiz->palavra1.c_str();
-    const char* aux3 = raiz->palavra2.c_str();
 
     if(raiz == nullptr){
         // se não está na tabela de símbolos
@@ -326,20 +339,26 @@ Item A23:: buscaA23(NoA23* raiz, string key){
         return aux;
     }
 
+    const char* aux2 = raiz->palavra1.c_str();
+
+    // key == palavra1
     if(strcmp(aux1, aux2) == 0 )
         return raiz->item1;
     
-    
-    if((raiz->tresNo) && strcmp(aux1, aux3) == 0)
+    // key == palavra2
+    if((raiz->tresNo) && strcmp(aux1, raiz->palavra2.c_str()) == 0)
         return raiz->item2;
     
-
+    
+    // key < palavra1
     if(strcmp(aux1, aux2) < 0)
         return buscaA23(raiz->esq, key);
 
-    if(raiz->tresNo && strcmp(aux1, aux2) < 0 && strcmp(aux1, aux3) > 0)
+    // palavra1 < key < palavra2
+    if((raiz->tresNo) && strcmp(aux1, raiz->palavra2.c_str()) < 0)
         return buscaA23(raiz->meio, key);
 
+    // palavra1 < palavra2 < key
     return buscaA23(raiz->dir, key);
 }
 
@@ -376,31 +395,28 @@ void A23:: viz(NoA23* node)
 
 void A23::inorder(NoA23* raiz){
     // acho que ta certo
-    //if(raiz->esq != nullptr)
-    //    inorder(raiz->esq);
+    if(raiz->esq != nullptr)
+        inorder(raiz->esq);
 
     //cout << (raiz==nullptr) << endl;
     cout << raiz->palavra1 << endl;
 
-    //if(raiz->tresNo) {
-    //    if(raiz->meio != nullptr)
-    //        inorder(raiz->meio);
-    //    cout << raiz->palavra2 << endl;
-    //}
+    if(raiz->meio != nullptr){
+        inorder(raiz->meio);
+        cout << raiz->palavra2 << endl;
+    }
 
-    //if(raiz->dir != nullptr)
-    //    inorder(raiz->dir);
+    if(raiz->dir != nullptr)
+        inorder(raiz->dir);
 
 }
 
 void A23:: imprime(){
-    this->inorder(this->raiz);
+    cout << this->tam << endl;
+    viz(this->raiz);
+    //this->inorder(this->raiz);
 }
 
 Item A23:: busca(string key){
     return this->buscaA23(this->raiz, key);
-}
-
-vector<string> palavrasFrequentes(){
-    
 }
