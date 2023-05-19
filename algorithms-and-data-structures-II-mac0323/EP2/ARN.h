@@ -23,7 +23,6 @@ class ARN{
         ~ARN();
         NoARN* getRaiz();
         void daFree(NoARN* raiz);
-        void setRaiz(NoARN* raiz);
         NoARN* rodaEsq(NoARN* raiz);
         NoARN* rodaDir(NoARN* raiz);
         NoARN* insereARN(NoARN* raiz, string key, Item item);
@@ -33,4 +32,5 @@ class ARN{
         void add(string key, Item val);
         void imprime();
         Item busca(string key);
+        void ajudaPalavrasFrequentes(NoARN* raiz, pFrequentesVetor* pf);
 };

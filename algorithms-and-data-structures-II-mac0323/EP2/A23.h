@@ -12,7 +12,6 @@ struct NoA23{
     Item item2;
     string palavra2;
     bool tresNo;
-    //No* pai;
     NoA23* esq;
     NoA23* meio;
     NoA23* dir;
@@ -28,15 +27,12 @@ class A23{
         ~A23();
         NoA23* getRaiz();
         void daFree(NoA23* raiz);
-        void setRaiz(NoA23* raiz);
-        NoA23* insereA23(NoA23* raiz, string key, Item item);
+        NoA23* insereA23(NoA23* raiz, string key, Item item, bool* cresceu);
         Item buscaA23(NoA23 *raiz, string key);
         void inorder(NoA23* raiz);
         NoA23* criaNo(string key, Item item);
         void add(string key, Item val);
-        //NoA23* ajuda(NoA23* raiz, string key, Item item);
         int ehFolha(NoA23* raiz);
-        NoA23* ajudaInserir(NoA23* raiz, NoA23* novo);
         void viz(NoA23* node);
         void imprime();
         Item busca(string key);

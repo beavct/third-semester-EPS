@@ -1,23 +1,35 @@
 #include <iostream>
 #include <string.h>
+#include <vector>
 #include "no.h"
 #include "VO.h"
 
 using namespace std;
 
 VO:: VO(){
-    this->palavras = (Palavras*)malloc(sizeof(Palavras)*2);
+    this->itens = (Item*)calloc(2,sizeof(Item)*2);
+    this->palavras = (string*)calloc(2, sizeof(string)*2);
     this->max=2;
     this->qntPalavras=0;
 }
 
 VO:: ~VO(){
     free(this->palavras);
+    free(this->itens);
 }
 
 void VO:: resize(){
-    this->max = 2*this->max;
-    this->palavras = (Palavras*)realloc(this->palavras, sizeof(Palavras)*this->max);
+    this->max *= 2;
+    Item* novo1 = (Item*)calloc(this->max,sizeof(Item)*this->max);
+    string* novo2 = (string*)calloc(this->max, sizeof(string)*this->max);
+    
+    for(int i=0; i < this->qntPalavras; i++){
+        novo1[i] = this->itens[i];
+        novo2[i] = this->palavras[i];
+    }
+    
+    this->itens = novo1;
+    this->palavras = novo2;
 }
 
 int VO:: getQntPalavras(){
@@ -26,75 +38,48 @@ int VO:: getQntPalavras(){
 
 void VO:: insere(string key, Item val){
     int flag=0;
+    int inicio, fim;
+    int meio;
 
-    for(int i=0; i<this->qntPalavras; i++){
-        if(this->palavras[i].palavra == key){
-            this->palavras[i].item.qntOcorrencias++;
+    inicio = 0;
+    meio = 0;
+    fim = this->qntPalavras-1;
+
+    while(inicio <= fim){
+        meio = (inicio + fim) / 2;
+
+        if(strcmp(this->palavras[meio].c_str(), key.c_str()) == 0){
+            this->itens[meio].qntOcorrencias += 1;
             flag=1;
             break;
         }
+        
+        if(strcmp(this->palavras[meio].c_str(), key.c_str()) > 0)
+            fim = meio-1;
+        else 
+            inicio = meio+1;
     }
 
     if(!flag){
-        if(this->qntPalavras+1 == this->max)
-            resize();
 
-        this->palavras[this->qntPalavras].palavra = key;
-        this->palavras[this->qntPalavras].item = val;
-        this->qntPalavras++;
-    }
+        if(this->qntPalavras != 0 && this->qntPalavras >= meio && strcmp(this->palavras[meio].c_str(), key.c_str()) < 0)
+            meio++;
 
-}
-
-void VO:: quickSort(int ini, int fim){
-    // base case
-    if (ini >= fim)
-        return;
- 
-    // partitioning the array
-    int p = particiona(ini, fim);
- 
-    // Sorting the left part
-    quickSort(ini, p - 1);
- 
-    // Sorting the right part
-    quickSort(p + 1, fim);
-}
-
-int VO:: particiona(int ini, int fim){
-     
-    Palavras pivot = this->palavras[ini];
- 
-    int count = 0;
-    for (int i = ini + 1; i <= fim; i++) {
-        if (strcmp(this->palavras[i].palavra.c_str(), pivot.palavra.c_str()) < 0)
-            count++;
-    }
- 
-    // Giving pivot element its correct position
-    int pivotIndex = ini + count;
-    swap(this->palavras[pivotIndex], this->palavras[ini]);
- 
-    // Sorting left and right parts of the pivot element
-    int i = ini, j = fim;
- 
-    while (i < pivotIndex && j > pivotIndex) {
+        for(int i=this->qntPalavras; i>meio; i--){
+            this->palavras[i] = this->palavras[i-1];
+            this->itens[i] = this->itens[i-1];
+        }
         
- 
-        while (strcmp(this->palavras[i].palavra.c_str(), pivot.palavra.c_str()) < 0) {
-            i++;
-        }
- 
-        while (strcmp(this->palavras[j].palavra.c_str(), pivot.palavra.c_str()) > 0) {
-            j--;
-        }
- 
-        if (i < pivotIndex && j > pivotIndex) {
-            swap(this->palavras[i++], this->palavras[j--]);
-        }
+        this->palavras[meio] = key;
+        this->itens[meio] = val;
+        this->qntPalavras += 1;
+
+        if(this->max == this->qntPalavras)
+            resize();
     }
- 
-    return pivotIndex;
+
+    //imprime();
+    //cout << "----------------" << endl; 
 }
 
 Item VO:: busca(string key){
@@ -104,31 +89,26 @@ Item VO:: busca(string key){
     while(inicio <= fim){
         int meio = (inicio + fim) / 2;
 
-        if(strcmp(this->palavras[meio].palavra.c_str(), key.c_str()) == 0)
-            return this->palavras[meio].item;
+        if(strcmp(this->palavras[meio].c_str(), key.c_str()) == 0)
+            return this->itens[meio];
 
-        if(strcmp(this->palavras[meio].palavra.c_str(), key.c_str()) > 0)
+        if(strcmp(this->palavras[meio].c_str(), key.c_str()) > 0)
             fim = meio - 1;
         
-        if(strcmp(this->palavras[meio].palavra.c_str(), key.c_str()) < 0)
+        if(strcmp(this->palavras[meio].c_str(), key.c_str()) < 0)
             inicio = meio + 1;
     }
 
-    /*for(int i = 0; i < this->qntPalavras; i++){
-        if(this->palavras[i].palavra == key){
-            return this->palavras[i].item;
-        }
-    }*/
-
     // se não está na tabela de símbolos
     Item aux;
-    aux.nVogais=-1;
-    aux.qntOcorrencias=-1;
-    aux.tam=-1;
+    aux.nVogais=0;
+    aux.qntOcorrencias=0;
+    aux.tam=0;
     return aux;
 }
 
 void VO:: add(string key, Item val){
+
     this->insere(key, val);
 }
 
@@ -136,13 +116,24 @@ void VO:: inorder(){
     //cout << this->qntPalavras << endl;
     
     for(int i=0; i< this->qntPalavras; i++){
-        cout << this->palavras[i].palavra << " " << this->palavras[i].item.qntOcorrencias << endl;
+        cout << this->palavras[i] << " " << this->itens[i].qntOcorrencias << " " << this->itens[i].nVogais << " " << this->itens[i].tam << endl;
         //cout << this->palavras[i].palavra << endl;
     }
 }
 
 void VO:: imprime(){
-    this->inorder();
+    inorder();
 }
 
-
+void VO:: ajudaPalavrasFrequentes(pFrequentesVetor* pf){
+    for(int i=0; i<this->qntPalavras; i++){
+            if(this->itens[i].qntOcorrencias > pf->nFrequencia){
+            pf->palavras.clear();
+            pf->palavras.push_back(this->palavras[i]);
+            pf->nFrequencia = this->itens[i].qntOcorrencias;
+        }
+        else if(this->itens[i].qntOcorrencias == pf->nFrequencia){
+            pf->palavras.push_back(this->palavras[i]);
+        }
+    }
+}

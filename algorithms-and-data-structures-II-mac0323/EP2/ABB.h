@@ -23,11 +23,11 @@ class ABB{
         ~ABB();
         NoABB* getRaiz();
         void daFree(NoABB* raiz);
-        void setRaiz(NoABB* raiz);
         NoABB* insereABB(NoABB* raiz, string key, Item item);
         Item buscaABB(NoABB *raiz, string key);
         void inorder(NoABB* raiz);
         void add(string key, Item val);
         void imprime();
         Item busca(string key);
+        void ajudaPalavrasFrequentes(NoABB* raiz, pFrequentesVetor* pf);
 };

@@ -28,10 +28,6 @@ NoTR* TR:: getRaiz(){
     return this->raiz;
 }
 
-void TR:: setRaiz(NoTR* raiz){
-    this->raiz = raiz;
-}
-
 NoTR* TR:: rodaEsq(NoTR* raiz){
     NoTR* auxD = raiz->dir;
     NoTR* auxE = auxD->esq;
@@ -107,17 +103,18 @@ NoTR* TR:: insereTR(NoTR* raiz, string key, Item item){
 
 Item TR:: buscaTR(NoTR *raiz, string key){
     const char* aux1 = key.c_str();
-    const char* aux2 = raiz->palavra.c_str();
 
     if(raiz == nullptr){
         // se não está na tabela de símbolos
         Item aux;
-        aux.nVogais=-1;
-        aux.qntOcorrencias=-1;
-        aux.tam=-1;
+        aux.nVogais=0;
+        aux.qntOcorrencias=0;
+        aux.tam=0;
         return aux;
     }
 
+    const char* aux2 = raiz->palavra.c_str();
+    
     if(strcmp(aux1, aux2) == 0)
         return raiz->item;
 
@@ -136,8 +133,8 @@ void TR::inorder(NoTR* raiz){
     if(raiz->esq != nullptr)
         inorder(raiz->esq);
     
-    cout << raiz->palavra << " " << raiz->item.qntOcorrencias << endl;
-    //cout << raiz->palavra << endl;
+    //cout << raiz->palavra << " " << raiz->item.qntOcorrencias << endl;
+    cout << raiz->palavra << endl;
 
     if(raiz->dir != nullptr)
         inorder(raiz->dir);
@@ -149,4 +146,21 @@ void TR:: imprime(){
 
 Item TR:: busca(string key){
     return this->buscaTR(this->raiz, key);
+}
+
+void TR:: ajudaPalavrasFrequentes(NoTR* raiz, pFrequentesVetor* pf){
+    if(raiz->esq != nullptr)
+        ajudaPalavrasFrequentes(raiz->esq, pf);
+    
+    if(raiz->item.qntOcorrencias > pf->nFrequencia){
+        pf->palavras.clear();
+        pf->palavras.push_back(raiz->palavra);
+        pf->nFrequencia = raiz->item.qntOcorrencias;
+    }
+    else if(raiz->item.qntOcorrencias == pf->nFrequencia){
+        pf->palavras.push_back(raiz->palavra);
+    }
+
+    if(raiz->dir != nullptr)
+        ajudaPalavrasFrequentes(raiz->dir, pf);
 }

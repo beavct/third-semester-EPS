@@ -89,7 +89,7 @@ int main(){
     A23 *arvore23 = new A23();
 
     // vetores que guardarão as infos que podem ser consultadas
-    vetorGenerico pFrequentes; // palavras mais frequentes do texto -> vou ter que olhar as estruturas mesmo
+    pFrequentesVetor pFrequentes; // palavras mais frequentes do texto -> vou ter que olhar as estruturas mesmo
     vetorGenerico pLongas; // palavras mais longas -> pré-processamento
     vetorGenerico maioresSemRepeticao; // n repetem letras
     vetorGenerico menoresComMaisVogais; // vogais sem repetição
@@ -124,6 +124,10 @@ int main(){
         for(char c: remover)
             palavra.erase(remove(palavra.begin(), palavra.end(), c), palavra.end());
 
+        // quando a palavra é só simbolo ela fica vazia
+        if(palavra == "")
+            continue;
+
         // preenche as informações da palavra
         auxItem.tam = (int)strlen(palavra.c_str());
         auxItem.qntOcorrencias = 1;
@@ -141,23 +145,6 @@ int main(){
             arvoreRN->add(palavra, auxItem);
         else // A23
             arvore23->add(palavra, auxItem);
-
-        // cuida do vetor de palavras mais frequentes - FUNÇÃO F
-        for(int i=0; i<(int)pFrequentes.palavras.size();i++){
-            if(pFrequentes.palavras[i] == palavra){
-                auxItem.qntOcorrencias += pFrequentes.aux1;
-                break;
-            }
-        }
-        if(auxItem.qntOcorrencias > pFrequentes.aux1){
-            pFrequentes.palavras.clear();
-            pFrequentes.palavras.push_back(palavra);
-            pFrequentes.aux1 = auxItem.qntOcorrencias;
-        }
-        else if(auxItem.qntOcorrencias == pFrequentes.aux1){
-            pFrequentes.palavras.push_back(palavra);
-
-        }
 
         // cuida das palavras mais longas - FUNÇÃO L
         if(auxItem.tam > pLongas.aux1){
@@ -188,16 +175,8 @@ int main(){
 
 
         // cuida das menores palavras com mais vogaus sem repetição - FUNÇÃO VD
-        /*
-        if(nRepeteVogal(palavra) && auxItem.tam < menoresComMaisVogais.aux2 && auxItem.nVogais > menoresComMaisVogais.aux1){
-            cout << palavra << " entrou aq1" << endl;
-            menoresComMaisVogais.palavras.clear();
-            menoresComMaisVogais.palavras.push_back(palavra);
-            menoresComMaisVogais.aux2 = auxItem.tam;
-            menoresComMaisVogais.aux1 = auxItem.nVogais;
-        }
-        */
-       // acho que ta certo
+       // se a palavra n repete vogal e tem a mesma quantidade ou mais vogais
+       /*
        if(nRepeteVogal(palavra) && auxItem.nVogais >= menoresComMaisVogais.aux1){
                 menoresComMaisVogais.palavras.clear();
                 menoresComMaisVogais.palavras.push_back(palavra);
@@ -206,7 +185,6 @@ int main(){
        }
         else if(nRepeteVogal(palavra) && auxItem.tam == menoresComMaisVogais.aux2 && auxItem.nVogais == menoresComMaisVogais.aux1){
             int flagMenor=1;
-            cout << palavra << " entrou aq2" << endl;
             for(int i=0; i<(int)maioresSemRepeticao.palavras.size();i++)
                 if(maioresSemRepeticao.palavras[i] == palavra){
                     flagMenor = 0;            
@@ -215,11 +193,31 @@ int main(){
             if(flagMenor)
                 menoresComMaisVogais.palavras.push_back(palavra);
         }
-    }
+        */
+       // se n repete vogais e tem a msm quantidade ou mais
+       if(nRepeteVogal(palavra) && auxItem.nVogais >= menoresComMaisVogais.aux1){
+            // se tem o mesmo tamanho da palavra e a msm quantidade de vogais
+            if(auxItem.tam == menoresComMaisVogais.aux2 && auxItem.nVogais == menoresComMaisVogais.aux1){
+                int flagMenor=0;
+                for(int i=0; i<(int)maioresSemRepeticao.palavras.size();i++){
+                    if(maioresSemRepeticao.palavras[i] == palavra){
+                        flagMenor = 0;            
+                        break;
+                    }
+                }       
+                if(flagMenor)
+                    menoresComMaisVogais.palavras.push_back(palavra);
 
-    // ordenar o vetor depois da leitura
-    if(estrut == "VO")
-        vetorOrdenado->quickSort(0, vetorOrdenado->getQntPalavras()-1);
+            }
+
+            else if(auxItem.nVogais > menoresComMaisVogais.aux1){
+                menoresComMaisVogais.palavras.clear();
+                menoresComMaisVogais.palavras.push_back(palavra);
+                menoresComMaisVogais.aux2 = auxItem.tam;
+                menoresComMaisVogais.aux1 = auxItem.nVogais;                   
+            }
+        }
+    }
 
     file >> nConsultas;
 
@@ -230,9 +228,21 @@ int main(){
 
         // quais as palavras mais frequêntes no texto - FUNÇÃO F
         if(consulta == "F"){
+            if(estrut == "VO")
+                vetorOrdenado->ajudaPalavrasFrequentes(&pFrequentes);
+            else if(estrut == "ABB")
+                arvoreBB->ajudaPalavrasFrequentes(arvoreBB->getRaiz(), &pFrequentes);
+            else if(estrut == "TR")
+                treap->ajudaPalavrasFrequentes(treap->getRaiz(), &pFrequentes);
+            else if(estrut == "ARN")
+                arvoreRN->ajudaPalavrasFrequentes(arvoreRN->getRaiz(), &pFrequentes);
+            //else
+
+
             for(int i=0; i<(int)pFrequentes.palavras.size(); i++){
-                cout << pFrequentes.palavras[i] << endl;
+                cout << pFrequentes.palavras[i] << " ";
             }
+            cout << endl;
         }
         // procura a quantidade de ocorrências de uma palavra - FUNÇÃO O
         else if(consulta == "O"){

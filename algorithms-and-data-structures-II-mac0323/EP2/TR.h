@@ -22,7 +22,6 @@ class TR{
         ~TR();
         NoTR* getRaiz();
         void daFree(NoTR* raiz);
-        void setRaiz(NoTR* raiz);
         NoTR* rodaEsq(NoTR* raiz);
         NoTR* rodaDir(NoTR* raiz);
         NoTR* insereTR(NoTR* raiz, string key, Item item);
@@ -31,4 +30,5 @@ class TR{
         void add(string key, Item val);
         void imprime();
         Item busca(string key);
+        void ajudaPalavrasFrequentes(NoTR* raiz, pFrequentesVetor* pf);
 };
