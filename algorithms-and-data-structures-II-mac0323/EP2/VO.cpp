@@ -6,10 +6,10 @@
 
 using namespace std;
 
-VO:: VO(){
-    this->itens = (Item*)calloc(2,sizeof(Item)*2);
-    this->palavras = (string*)calloc(2, sizeof(string)*2);
-    this->max=2;
+VO:: VO(int n){
+    this->itens = (Item*)malloc(sizeof(Item)*n);
+    this->palavras = (string*)malloc(sizeof(string)*n);
+    this->max=n;
     this->qntPalavras=0;
 }
 
@@ -45,7 +45,14 @@ void VO:: insere(string key, Item val){
     meio = 0;
     fim = this->qntPalavras-1;
 
-    while(inicio <= fim){
+    if(this->qntPalavras == 0){
+        this->palavras[0] = key;
+        this->itens[0] = val;
+        this->qntPalavras += 1;        
+        flag=1;
+    }
+
+    while(inicio <= fim && !flag){
         meio = (inicio + fim) / 2;
 
         if(strcmp(this->palavras[meio].c_str(), key.c_str()) == 0){

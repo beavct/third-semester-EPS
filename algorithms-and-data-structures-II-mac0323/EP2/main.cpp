@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 #include "no.h"
-#include "VO.h" // a estrutura básica ta ok
-#include "ABB.h" // a estrutura básica ta ok
-#include "TR.h" // a estrutura básica ta ok
-#include "ARN.h"
-#include "A23.h"
+#include "VO.h" 
+#include "ABB.h" 
+#include "TR.h" 
+#include "ARN.h" 
+#include "A23.h" // castigo do monstro
 
 using namespace std;
 
@@ -81,12 +81,6 @@ int contaVogais(string s){
 }
 
 int main(){
-    // instância as estrututas
-    VO *vetorOrdenado =  new VO();
-    ABB *arvoreBB = new ABB();
-    TR *treap = new TR();
-    ARN *arvoreRN = new ARN();
-    A23 *arvore23 = new A23();
 
     // vetores que guardarão as infos que podem ser consultadas
     pFrequentesVetor pFrequentes; // palavras mais frequentes do texto -> vou ter que olhar as estruturas mesmo
@@ -112,6 +106,12 @@ int main(){
     file >> estrut;
     file >> nPalavras;
 
+    // instância as estrututas
+    VO *vetorOrdenado =  new VO(nPalavras);
+    ABB *arvoreBB = new ABB();
+    TR *treap = new TR();
+    ARN *arvoreRN = new ARN();
+    A23 *arvore23 = new A23();
 
     // leitura e limpeza das palavras está ok
     for(int i = 0; i<nPalavras; i++){
@@ -217,7 +217,8 @@ int main(){
                 treap->ajudaPalavrasFrequentes(treap->getRaiz(), &pFrequentes);
             else if(estrut == "ARN")
                 arvoreRN->ajudaPalavrasFrequentes(arvoreRN->getRaiz(), &pFrequentes);
-            //else
+            else
+                arvore23->ajudaPalavrasFrequentes(arvore23->getRaiz(), &pFrequentes);
 
 
             for(int i=0; i<(int)pFrequentes.palavras.size(); i++){
@@ -265,7 +266,7 @@ int main(){
     }
 
     // imprime as palavras e frequências das estrutruturas
-    
+    /*
     if(estrut == "VO")
         vetorOrdenado->imprime();
     else if(estrut == "ABB")
@@ -276,7 +277,7 @@ int main(){
         arvoreRN->imprime();
     else // A23
         arvore23->imprime();
-    
+    */
 
     file.close();
 

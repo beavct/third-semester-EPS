@@ -45,7 +45,7 @@ NoA23* A23:: criaNo(string key, Item item){
 
 void A23:: add(string key, Item val){
     bool cresceu = false;
-    insereA23(this->raiz, key, val, &cresceu);
+    this->raiz = insereA23(this->raiz, key, val, &cresceu);
 }
 
 int A23:: ehFolha(NoA23* raiz){
@@ -93,7 +93,7 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
         // a raiz só tem uma palavra, então podemos encaixar a key
         if(!(raiz->tresNo)){
             // key < palavra1 -> troca
-            if(strcmp(raiz->palavra1.c_str(), key.c_str()) < 0){
+            if(strcmp(raiz->palavra1.c_str(), key.c_str()) > 0){
                 raiz->palavra2 = raiz->palavra1;
                 raiz->item2 = raiz->item1;
 
@@ -102,7 +102,7 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
 
                 this->tam++;
             }
-            // palavra1 <
+            // palavra1 < key
             else{
                 raiz->palavra2 = key;
                 raiz->item2 = item;
@@ -125,6 +125,9 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
                 NoA23* maior = criaNo(raiz->palavra2, raiz->item2);
                 NoA23* meio = criaNo(raiz->palavra1, raiz->item1);
 
+                //if(raiz == this->raiz)
+                //   this->raiz = meio;
+
                 raiz->palavra1 = key;
                 raiz->item1 = item;
                 //raiz->palavra2 = nullptr;
@@ -142,14 +145,19 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
             // adicionar no centro
             // palavra1 < key < palavra2
             else if(strcmp(raiz->palavra2.c_str(), key.c_str()) > 0){
+                //cout << "oie" << endl;
                 NoA23* maior = criaNo(raiz->palavra2, raiz->item2);
                 NoA23* meio = criaNo(key, item);
+
 
                 //raiz->palavra2 = nullptr;
                 raiz->tresNo = false;
 
                 meio->esq = raiz;
                 meio->meio = maior;
+
+                //if(raiz == this->raiz)
+                //    this->raiz = meio;
 
                 *cresceu = true;
                 this->tam++;
@@ -168,6 +176,9 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
 
                 meio->esq = raiz;
                 meio->meio = maior;
+
+                //if(raiz == this->raiz)
+                //   this->raiz = meio;
 
                 *cresceu = true;
                 this->tam++;
@@ -362,48 +373,18 @@ Item A23:: buscaA23(NoA23* raiz, string key){
     return buscaA23(raiz->dir, key);
 }
 
-void A23:: viz(NoA23* node)
-{
-    if (node == nullptr)
-    {
-        return;
-    }
-
-    std::cout << node->palavra1 << "[label=\"" << node->palavra1;
-
-    if (!node->tresNo)
-    {
-        std::cout << " " << node->palavra2;
-    }
-
-    std::cout << "\"];\n\n";
-
-    if (node->esq != nullptr)
-    {
-        std::cout << node->palavra1 << " -> " << node->esq->palavra1 << "\n";
-        std::cout << node->palavra1 << " -> " << node->meio->palavra1 << "\n";
-    }
-    if (node->dir != nullptr)
-    {
-        std::cout << node->palavra1 << " -> " << node->dir->palavra1 << "\n";
-    }
-
-    viz(node->esq);
-    viz(node->meio);
-    viz(node->dir);
-}
-
 void A23::inorder(NoA23* raiz){
-    // acho que ta certo
     if(raiz->esq != nullptr)
         inorder(raiz->esq);
 
-    //cout << (raiz==nullptr) << endl;
-    cout << raiz->palavra1 << endl;
+    cout << raiz->palavra1 << " " << raiz->item1.qntOcorrencias << endl;
 
     if(raiz->meio != nullptr){
         inorder(raiz->meio);
-        cout << raiz->palavra2 << endl;
+    }
+
+    if(raiz->tresNo){
+        cout << raiz->palavra2 << " " << raiz->item1.qntOcorrencias << endl;
     }
 
     if(raiz->dir != nullptr)
@@ -412,11 +393,53 @@ void A23::inorder(NoA23* raiz){
 }
 
 void A23:: imprime(){
-    cout << this->tam << endl;
-    viz(this->raiz);
-    //this->inorder(this->raiz);
+    //cout << this->tam << endl;
+    this->inorder(this->raiz);
 }
 
 Item A23:: busca(string key){
     return this->buscaA23(this->raiz, key);
+}
+
+void A23:: ajudaPalavrasFrequentes(NoA23* raiz, pFrequentesVetor* pf){
+    int flag = 0;
+
+    if(raiz->esq != nullptr)
+        ajudaPalavrasFrequentes(raiz->esq, pf);
+    
+    if(raiz->item1.qntOcorrencias > pf->nFrequencia){
+        pf->palavras.clear();
+        pf->palavras.push_back(raiz->palavra1);
+        pf->nFrequencia = raiz->item1.qntOcorrencias;
+    }
+    else if(raiz->item1.qntOcorrencias == pf->nFrequencia){
+        for(int i=0; i<(int)pf->palavras.size(); i++){
+            if(pf->palavras[i] == raiz->palavra1)
+                flag=1;
+        }
+        if(!flag)
+            pf->palavras.push_back(raiz->palavra1);
+    }
+
+    flag=0;
+
+    if(raiz->item2.qntOcorrencias > pf->nFrequencia){
+        pf->palavras.clear();
+        pf->palavras.push_back(raiz->palavra2);
+        pf->nFrequencia = raiz->item2.qntOcorrencias;
+    }
+    else if(raiz->item2.qntOcorrencias == pf->nFrequencia){
+        for(int i=0; i<(int)pf->palavras.size(); i++){
+            if(pf->palavras[i] == raiz->palavra2)
+                flag=1;
+        }
+        if(!flag)
+            pf->palavras.push_back(raiz->palavra2);
+    }
+
+    if(raiz->meio != nullptr)
+        ajudaPalavrasFrequentes(raiz->meio, pf);
+
+    if(raiz->dir != nullptr)
+        ajudaPalavrasFrequentes(raiz->dir, pf);
 }

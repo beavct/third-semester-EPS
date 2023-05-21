@@ -36,4 +36,5 @@ class A23{
         void viz(NoA23* node);
         void imprime();
         Item busca(string key);
+        void ajudaPalavrasFrequentes(NoA23* raiz, pFrequentesVetor* pf);
 };

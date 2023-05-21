@@ -133,6 +133,7 @@ void ARN::inorder(NoARN* raiz){
 }
 
 void ARN:: imprime(){
+    //cout << "quantidade de palavras: " << this->tam << endl;
     this->inorder(this->raiz);
 }
 

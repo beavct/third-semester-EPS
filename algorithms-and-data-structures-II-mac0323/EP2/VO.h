@@ -16,7 +16,7 @@ class VO{
         string *palavras;
         Item *itens;
     public:
-        VO();
+        VO(int n);
         ~VO();
         void resize();
         int getQntPalavras();
