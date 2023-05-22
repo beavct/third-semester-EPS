@@ -1,12 +1,13 @@
 #include <bits/stdc++.h>
+#include <chrono>
 #include "no.h"
 #include "VO.h" 
 #include "ABB.h" 
 #include "TR.h" 
 #include "ARN.h" 
-#include "A23.h" // castigo do monstro
+#include "A23.h" 
 
-using namespace std;
+using namespace std::chrono;
 
 struct vetorGenerico{
     vector<string>palavras;
@@ -81,6 +82,7 @@ int contaVogais(string s){
 }
 
 int main(){
+    //auto beg = high_resolution_clock::now();
 
     // vetores que guardarão as infos que podem ser consultadas
     pFrequentesVetor pFrequentes; // palavras mais frequentes do texto -> vou ter que olhar as estruturas mesmo
@@ -94,7 +96,7 @@ int main(){
     string nomeArq, estrut, palavra, consulta;
 
     // símbolos que serão descartados 
-    string  remover = "012345678'9!@#$%*()+=§[]{}|<>,.:\";?/"; 
+    string  remover = "‘’“”012345678'9!@#$%*()+=§[]{}|<>,.:\";?/—_º"; 
 
 
     // LEITURA DO ARQUIVO
@@ -205,8 +207,6 @@ int main(){
     // lê as consultas desejadas
     for(int i=0; i<nConsultas; i++){
         file >> consulta;
-
-
         // quais as palavras mais frequêntes no texto - FUNÇÃO F
         if(consulta == "F"){
             if(estrut == "VO")
@@ -264,6 +264,7 @@ int main(){
             }           
         }
     }
+
 
     // imprime as palavras e frequências das estrutruturas
     /*

@@ -1,5 +1,5 @@
 PP=g++
-COMPFLAGS= -Wall -g
+COMPFLAGS= -Wall
 OTHERS= VO.cpp ABB.cpp TR.cpp ARN.cpp A23.cpp
 
 ###################################################################################
