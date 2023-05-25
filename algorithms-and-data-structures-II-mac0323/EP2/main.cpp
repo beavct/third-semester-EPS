@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include <chrono>
+//#include <chrono>
 #include "no.h"
 #include "VO.h" 
 #include "ABB.h" 
@@ -15,7 +15,6 @@ struct vetorGenerico{
     int aux2 = INT_MAX; // só vai ser usado no caso das menores palavras com mais vogais sem repetição
 };
 
-// taok
 int nRepeteVogal(string palavra){
     char vogais[5];
     int j=0;
@@ -36,7 +35,6 @@ int nRepeteVogal(string palavra){
     return 1; // não repete vogal
 }
 
-// taok
 int nRepeteLetra(string palavra){
     char vetorAux[26];
     int i = 0;
@@ -56,12 +54,9 @@ int nRepeteLetra(string palavra){
     return 1; // não repetiu letras
 }
 
-// taok - só n conta palavras com acento
 int contaVogais(string s){
-    //int Af, Ef, If, Of, Uf;
     char vogais[5];
     int j=0, flag=0;
-    //Af=Ef=If=Of=Uf=0;
 
     for(int i=0; i<(int)strlen(s.c_str()) && j!=5; i++){
         char aux = tolower(s[i]);
@@ -81,8 +76,12 @@ int contaVogais(string s){
     return j;
 }
 
-int main(){
+int main(int argc, char** argv){
+    // variáveis utilizadas para o cálculo do tempo gasto em cada função
     //auto beg = high_resolution_clock::now();
+    //auto end = high_resolution_clock::now();
+    //auto duration = duration_cast<microseconds>(end - beg);
+    //cout << duration.count() << endl;
 
     // vetores que guardarão as infos que podem ser consultadas
     pFrequentesVetor pFrequentes; // palavras mais frequentes do texto -> vou ter que olhar as estruturas mesmo
@@ -98,10 +97,7 @@ int main(){
     // símbolos que serão descartados 
     string  remover = "‘’“”012345678'9!@#$%*()+=§[]{}|<>,.:\";?/—_º"; 
 
-
-    // LEITURA DO ARQUIVO
-    cout << "Digite o nome do arquivo de entrada: ";
-    cin >> nomeArq;
+    nomeArq = argv[1];
 
     file.open(nomeArq.c_str());
 
@@ -135,7 +131,7 @@ int main(){
         auxItem.qntOcorrencias = 1;
         auxItem.nVogais = contaVogais(palavra);
 
-
+        
         // insere na estrutura correta
         if(estrut == "VO")
             vetorOrdenado->add(palavra, auxItem);
@@ -147,6 +143,7 @@ int main(){
             arvoreRN->add(palavra, auxItem);
         else // A23
             arvore23->add(palavra, auxItem);
+        
 
         // cuida das palavras mais longas - FUNÇÃO L
         if(auxItem.tam > pLongas.aux1){
@@ -154,10 +151,19 @@ int main(){
             pLongas.palavras.push_back(palavra);
             pLongas.aux1 = auxItem.tam;
         }
+        
         else if(auxItem.tam == pLongas.aux1){
-            pLongas.palavras.push_back(palavra);
-        }
+            int flagLonga=0;
 
+            for(int i=0; i<(int)pLongas.palavras.size(); i++){
+                if(pLongas.palavras[i] == palavra)
+                    flagLonga = 1;
+            }
+
+            if(!flagLonga)
+                pLongas.palavras.push_back(palavra);
+        }
+        
         // cuida das maiores palavras que não repetem letras - FUNÇÃO SR
         if(auxItem.tam > maioresSemRepeticao.aux1 && nRepeteLetra(palavra)){
             maioresSemRepeticao.palavras.clear();
@@ -220,14 +226,13 @@ int main(){
             else
                 arvore23->ajudaPalavrasFrequentes(arvore23->getRaiz(), &pFrequentes);
 
-
             for(int i=0; i<(int)pFrequentes.palavras.size(); i++){
                 cout << pFrequentes.palavras[i] << " ";
             }
             cout << endl;
         }
-        // procura a quantidade de ocorrências de uma palavra - FUNÇÃO O
-        else if(consulta == "O"){
+        //procura a quantidade de ocorrências de uma palavra - FUNÇÃO O
+        if(consulta == "O"){
             string palavraProcurada;
             Item auxItem;
             file >> palavraProcurada;
@@ -243,25 +248,31 @@ int main(){
             else // A23
                 auxItem = arvore23->busca(palavraProcurada);
 
+
             cout << auxItem.qntOcorrencias << endl;
         }
         // quais as palavras mais longas - FUNÇÃO L 
         else if(consulta == "L"){
             for(int i=0; i<(int)pLongas.palavras.size(); i++){
-                cout << pLongas.palavras[i] << endl;
-            }            
+                cout << pLongas.palavras[i] << " ";
+            }   
+            cout << endl;         
         }
         // quais as maiores palavras que não repetem letras - FUNÇÃO SR
         else if(consulta == "SR"){
             for(int i=0; i<(int)maioresSemRepeticao.palavras.size(); i++){
-                cout << maioresSemRepeticao.palavras[i] << endl;
-            }           
+                cout << maioresSemRepeticao.palavras[i] << " ";
+            }      
+            cout << endl;         
+
         }
         // quais as menores palavras com mais vogais sem repetição - FUNÇÃO VD
         else{
             for(int i=0; i<(int)menoresComMaisVogais.palavras.size(); i++){
-                cout << menoresComMaisVogais.palavras[i] << endl;
-            }           
+                cout << menoresComMaisVogais.palavras[i] << " ";
+            }  
+            cout << endl;         
+
         }
     }
 
@@ -281,7 +292,6 @@ int main(){
     */
 
     file.close();
-
 
     return 0;
 }

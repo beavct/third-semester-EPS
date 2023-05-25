@@ -30,7 +30,7 @@ NoTR* TR:: getRaiz(){
 
 NoTR* TR:: rodaEsq(NoTR* raiz){
     NoTR* auxD = raiz->dir;
-    NoTR* auxE = auxD->esq;
+    NoTR* auxE = raiz->dir->esq;
 
     auxD->esq = raiz;
     raiz->dir = auxE;
@@ -41,14 +41,13 @@ NoTR* TR:: rodaEsq(NoTR* raiz){
 
 NoTR* TR:: rodaDir(NoTR* raiz){
     NoTR* auxE = raiz->esq;
-    NoTR* auxD = auxE->dir;
+    NoTR* auxD = raiz->esq->dir;
 
     auxE->dir = raiz;
     raiz->esq = auxD;
 
     // nova raiz
-    return auxE;  
-
+    return auxE; 
 }
 
 NoTR* TR:: insereTR(NoTR* raiz, string key, Item item){
@@ -58,8 +57,8 @@ NoTR* TR:: insereTR(NoTR* raiz, string key, Item item){
         raiz->item = item;
         raiz->esq = raiz->dir = nullptr;
 
-        srand(time(0));
-        raiz->prioridade = rand() % INT64_MAX;
+        srand(time(nullptr));
+        raiz->prioridade = rand() % INTMAX_MAX;
 
         if(this->tam == 0)
             this->raiz = raiz;
@@ -72,38 +71,38 @@ NoTR* TR:: insereTR(NoTR* raiz, string key, Item item){
     const char* aux1 = key.c_str();
     const char* aux2 = raiz->palavra.c_str();
 
+    if(strcmp(aux1, aux2) == 0){
+    // as duas palavras são iguais 
+        raiz->item.qntOcorrencias++;
+        return raiz;
+
+    }
+
     // nossa palavra é maior
-    if(strcmp(aux1, aux2) > 0){
+    else if(strcmp(aux1, aux2) > 0){
         raiz->dir = insereTR(raiz->dir, key, item);
 
         // consertar a prioridade de max heap
-        if(raiz->dir->prioridade > raiz->prioridade)
+        if(raiz->dir != nullptr && raiz->dir->prioridade > raiz->prioridade)
             raiz = rodaEsq(raiz);
 
         return raiz;
     }
 
     // nossa palavra é menor
-    else if(strcmp(aux1, aux2) < 0){
+    //else if(strcmp(aux1, aux2) < 0){
         raiz->esq = insereTR(raiz->esq, key, item);
 
         // consertar a prioridade de max heap
-        if(raiz->esq->prioridade > raiz->prioridade)
+        if(raiz->esq != nullptr && raiz->esq->prioridade > raiz->prioridade)
             raiz = rodaDir(raiz);
 
         return raiz;
-    }
-
-    else{ // as duas palavras são iguais 
-        raiz->item.qntOcorrencias++;
-        return raiz;
-    }
 
 }
 
 Item TR:: buscaTR(NoTR *raiz, string key){
     const char* aux1 = key.c_str();
-
     if(raiz == nullptr){
         // se não está na tabela de símbolos
         Item aux;
@@ -125,7 +124,7 @@ Item TR:: buscaTR(NoTR *raiz, string key){
 }
 
 void TR:: add(string key, Item val){
-    this->insereTR(this->raiz, key, val);
+    this->raiz = this->insereTR(this->raiz, key, val);
 }
 
 void TR::inorder(NoTR* raiz){
