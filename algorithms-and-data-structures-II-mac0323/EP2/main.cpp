@@ -76,7 +76,13 @@ int contaVogais(string s){
     return j;
 }
 
-int main(int argc, char** argv){
+int main(int argc, char* argv[]){
+
+    if(argc < 2){
+        cout << "Indique o arquivo de leitura do texto" << endl;
+        return 0;
+    }
+
     // variáveis utilizadas para o cálculo do tempo gasto em cada função
     //auto beg = high_resolution_clock::now();
     //auto end = high_resolution_clock::now();
@@ -198,7 +204,12 @@ int main(int argc, char** argv){
                     menoresComMaisVogais.palavras.push_back(palavra);
 
             }
-
+            else if(auxItem.nVogais == menoresComMaisVogais.aux1 && auxItem.tam <= menoresComMaisVogais.aux2){
+                menoresComMaisVogais.palavras.clear();
+                menoresComMaisVogais.palavras.push_back(palavra);
+                menoresComMaisVogais.aux2 = auxItem.tam;
+                //menoresComMaisVogais.aux1 = auxItem.nVogais;                   
+            }
             else if(auxItem.nVogais > menoresComMaisVogais.aux1){
                 menoresComMaisVogais.palavras.clear();
                 menoresComMaisVogais.palavras.push_back(palavra);
@@ -267,7 +278,7 @@ int main(int argc, char** argv){
 
         }
         // quais as menores palavras com mais vogais sem repetição - FUNÇÃO VD
-        else{
+        else if (consulta == "VD"){
             for(int i=0; i<(int)menoresComMaisVogais.palavras.size(); i++){
                 cout << menoresComMaisVogais.palavras[i] << " ";
             }  

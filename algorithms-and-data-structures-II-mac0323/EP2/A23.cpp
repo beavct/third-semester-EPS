@@ -316,7 +316,6 @@ NoA23* A23:: insereA23(NoA23* raiz, string key, Item item, bool* cresceu){
 }
 
 Item A23:: buscaA23(NoA23* raiz, string key){
-    
     if(raiz == nullptr){
         // se não está na tabela de símbolos
         Item aux;
@@ -344,8 +343,8 @@ Item A23:: buscaA23(NoA23* raiz, string key){
         return buscaA23(raiz->meio, key);
 
 
-    // palavra1 < palavra2 < key
-    else if(!(raiz->tresNo) && strcmp(key.c_str(), raiz->palavra2.c_str()) > 0)
+    // palavra1 < key
+    if(!(raiz->tresNo) && strcmp(key.c_str(), raiz->palavra1.c_str()) > 0)
         return buscaA23(raiz->meio, key);
 
     return buscaA23(raiz->dir, key);
@@ -401,7 +400,7 @@ void A23:: ajudaPalavrasFrequentes(NoA23* raiz, pFrequentesVetor* pf){
 
     flag=0;
 
-    if(raiz->item2.qntOcorrencias > pf->nFrequencia){
+    if((raiz->tresNo) && raiz->item2.qntOcorrencias > pf->nFrequencia){
         pf->palavras.clear();
         pf->palavras.push_back(raiz->palavra2);
         pf->nFrequencia = raiz->item2.qntOcorrencias;
