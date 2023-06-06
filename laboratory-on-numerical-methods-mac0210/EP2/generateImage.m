@@ -1,6 +1,8 @@
 function generateImage(n)
     imagem = im2double(zeros(n, n, 3, 'uint8'));
 
+    disp(abs(-1));
+
     for i=1:n
         for j=1:n
             imagem(i, j, 1) = R(i, j);
@@ -14,15 +16,15 @@ function generateImage(n)
 endfunction
 
 function r = R(x, y)
-    r = sinh(x * pi) + 10 *pi ;
+    r = tan(x);
 endfunction
 
 function g = G(x, y)
-    g = tanh(x + y) + 10 *pi + co;
+    g =  tan(x*y);
 endfunction
 
 function b = B(x, y)
-    b = cosh(x * pi);
+    b = tan(x);
 endfunction
 
 

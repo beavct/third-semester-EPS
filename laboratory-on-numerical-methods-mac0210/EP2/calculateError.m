@@ -8,13 +8,17 @@ function calculateError(originalImg, decompressedImg)
 
     err = errR = errG = errB = 0;
 
-    p = size(dec);
+    p1 = size(dec);
+    p2 = size(orig);
+
+    n = min(p1(1), p2(1));
 
     #disp(size(dec));
     #disp(size(orig));
 
-    for i=1:p(1)
-        for j=1:p(2)
+    # calcula o erro para imagens coloridas
+    for i=1:n
+        for j=1:n
 
         errR += (orig(i, j, 1) - dec(i, j, 1))^2;
         errG += (orig(i, j, 2) - dec(i, j, 2))^2; 
@@ -23,9 +27,9 @@ function calculateError(originalImg, decompressedImg)
         endfor
     endfor
 
-        errR *= (1/p(1)^2);
-        errG *= (1/p(1)^2);
-        errB *= (1/p(1)^2);
+        errR *= (1/n^2);
+        errG *= (1/n^2);
+        errB *= (1/n^2);
 
     err = (sqrt(errR) + sqrt(errG) + sqrt(errB))/3;
 
