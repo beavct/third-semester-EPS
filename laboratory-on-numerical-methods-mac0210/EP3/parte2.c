@@ -11,51 +11,64 @@ PARTE 2: INtegração por Monte Carlo
 #include <time.h>
 #include <math.h>
 
-/* Para sin(x) está funcionando*/
-#define f(x) pow(x,3)
+#define f(x) sin(x)
+#define g(x) pow(x,3)
+#define h(x) exp(-x)
 
-double monteCarloUni(int a, int b, unsigned long int n);
-double monteCarloMulti(int a, int b, unsigned long int n);
+double monteCarloUni(int a, int b, unsigned long int n, int op);
+double monteCarloMulti(unsigned long int n);
 
 int main(){
+    unsigned long int n;
 
-    printf("%lf\n", monteCarloMulti(3, 7, 10000000));
+    printf("Digite a quantidade de variáveis aleatórias (n): ");
+    scanf("%lud", &n);
+
+    printf("Aproximação da integral de sen(x) calculada de 0 à 1: %f\n", monteCarloUni(0, 1, n, 1));
+    printf("Aproximação da integral de x à terceira calculada de 3 à 7: %f\n", monteCarloUni(3, 7, n, 2));
+    printf("Aproximação da exponencial elevada à -x calculada de 0 à infinito: %f\n", monteCarloUni(0, 1, n, 3));
+    printf("Aproximação de Pi: %f\n", monteCarloMulti(n));
 
     return 0;
 }
 
-double monteCarloUni(int a, int b, unsigned long int n){
+double monteCarloUni(int a, int b, unsigned long int n, int op){
     double aprox = 0;
-    double x, y;
+    double x;
+    long unsigned int i;
 
     srand(time(0));
 
-    for(long unsigned int i = 0; i < n; i++) {
+    for(i = 0; i < n; i++) {
         x = (double)rand()/RAND_MAX;
 
-        aprox += f(x);
+        if(op == 1)
+            aprox += f(x);
+        else if(op == 2)
+            aprox += g(a + x * (b-a));
+        else /*op == 3*/
+            aprox += h(x) + h(1);
+
     }
 
-    return aprox/n;
-
+    return (double)aprox/n * (b-a);
 }
 
 /* Está calculando para Pi - OK */
-double monteCarloMulti(int a, int b, unsigned long int n){
+double monteCarloMulti(unsigned long int n){
     double aprox = 0;
     double x, y;
+    long unsigned int i;
 
     srand(time(0));
 
-    for(long unsigned int i = 0; i < n; i++) {
+    for(i = 0; i < n; i++) {
         x = (double)rand()/RAND_MAX;
         y = (double)rand()/RAND_MAX;
 
         if (x*x + y*y <= 1.0)
             aprox++;
     }
-
-    //printf("%f\n", 4 * (float)aprox/n);
 
     aprox = 4 * (double)aprox/n;
 

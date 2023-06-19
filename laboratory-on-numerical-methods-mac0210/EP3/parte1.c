@@ -18,19 +18,22 @@ long double simpsonsRule(int r);
 long double trapezoidalRule(int r);
 
 int main(){
-    long double ponto = 7.7;
+    int r;
     /*Quantidade de intervalos*/
-    int r = 5;
+    printf("Digite a quantidade de subintervalos (r): ");
+    scanf("%d", &r);
 
-    //printf("%lf\n", evalP7x(ponto));
+    printf("O trabalho computado por meio da regra de Simpson composto: %Lf\n", simpsonsRule(r));
+    printf("O trabalho computado por meio da regra do trapézio composto: %Lf\n", trapezoidalRule(r));
 
     return 0;
 }
 
 long double evalWj(int j){
     long double divisor = 1;
+    int i;
 
-    for(int i=0; i<7; i++){
+    for(i=0; i<7; i++){
         if(i != j){
             divisor *= (pontos_x[j] - pontos_x[i]);
         }
@@ -41,61 +44,65 @@ long double evalWj(int j){
 
 /*Calcula o polínômio interpolante de Lagrange*/
 long double evalP7x(long double x){
+    int i, j;
+    long double psiX = 1;
+    long double p7x = 0;
+    long double aux = 0;
+
     /*Se o x dado como parâmetro tem um f(x) já tabelado -> evita divisão por 0*/
-    for(int i=0; i<7; i++){
+    for(i=0; i<7; i++){
         if(x == pontos_x[i]) 
             return valores_fx[i];
     }
 
-    long double phiX = 1;
-    long double p7x = 0;
-    long double aux = 0;
 
-    for(int j=0; j<7; j++){
-        phiX *= (x-pontos_x[j]);
+    for(j=0; j<7; j++){
+        psiX *= (x-pontos_x[j]);
         aux += (evalWj(j)*valores_fx[j])/(x-pontos_x[j]); 
     }
 
-    p7x = phiX*aux;
+    p7x = psiX*aux;
 
     return p7x;
 }
 
 /* Regra de Simpson composto*/
 long double simpsonsRule(int r){
-    /* O método tem que ser aplicado com os subintervalos em pares*/
-    if(r % 2 != 0)
-        /* Aumentar o subintervalo aumenta a precisão do método*/
-        r++;
-
-    int h = 30/r;
+    int i;
+    long double h;
     long double value = 0;
 
-    for(int i=1; i<r/2; i++){
+    /* O método tem que ser aplicado com os subintervalos em pares*/
+    if(r % 2 != 0)
+        r++;
+        /* Aumentar o subintervalo aumenta a precisão do método*/
+
+    h = (long double)30/r;
+
+    for(i=1; i<r/2; i++){
         value += 2*evalP7x(h*2*i) + 4*evalP7x((h*2*i)-1);
     }
 
     value += 4*evalP7x((h*2*(r/2))-1) + evalP7x(0.0) + evalP7x(30.0);
 
-    value *= h/3;
+    value *= (long double)h/3;
 
     return value;
 }
 
 /* Regra do trapézio composto*/
 long double trapezoidalRule(int r){
-
-    int h = 30/r;
+    int i;
+    long double h = (long double)30/r;
     long double value = 0;
 
     /* 2*\sum_{i=1}^{i=r-1} f(t_i)*/
-    for(int i=1; i<r; i++){
-        value += evalP7x(h*i);
+    for(i=1; i<r; i++){
+        value += 2 * evalP7x(h*i);
     }
 
-    value *= 2;
     value += evalP7x(0.0) + evalP7x(30.0);
-    value *= h/2;
+    value *= (long double)h/2;
 
     return value;
 }
