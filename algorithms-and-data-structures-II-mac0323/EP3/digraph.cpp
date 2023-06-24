@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <queue>
+#include <algorithm>
 #include "digraph.h"
 #define MAX 256
 
@@ -15,14 +16,6 @@ Digraph:: Digraph(){
 
 Digraph:: ~Digraph(){
 
-}
-
-int Digraph:: getV(){
-    return this->V;
-}
-
-int Digraph:: getE(){
-    return this->E;
 }
 
 string Digraph:: getStringDigraph(){
@@ -60,10 +53,6 @@ void Digraph:: readDigraph(){
             int j=0, k=0;
             int save;
             bool connection = false;
-
-            // evita que dois vértices que possuem fragmentos iguais e formem um ciclo
-            if(novo->sequence == nodes[i]->sequence)
-                continue;
             
             // verifica se o nó que já está no grafo leva ao novo nó
             while(j < int(size(nodes[i]->sequence)) && nodes[i]->sequence[j] != novo->sequence[k]){
@@ -129,7 +118,7 @@ void Digraph:: readDigraph(){
 
 void Digraph:: teste(){
     for(int i=0; i<int(this->nodes.size()); i++){
-        cout << "seq orig " << nodes[i]->sequence << " " << nodes[i]->vertex <<  endl;
+        cout << "$ " << nodes[i]->sequence << " " << nodes[i]->vertex <<  endl;
 
         for(int j=0; j<int(nodes[i]->listSize); j++){
             cout << nodes[i]->conectedNodes[j]->sequence << " " << nodes[i]->conectedNodes[j]->vertex << endl;
@@ -152,19 +141,16 @@ void Digraph:: Cycle(){
     for(int v=0; v<this->V; v++){
         if(!marked[v]){
             dfsR(v, marked, onStack, q);
-            //marked[v] = true;
-            //cout << v << endl << endl;
         }
     }
 
-    delete(marked);
-    delete(onStack);
     delete(q);
 }
 
 vector<Node*> Digraph:: fixConnectedNodes(vector<Node*> auxVec, int i){
-    for(int j=i; j<int(auxVec.size()); j++)
-        auxVec[j] = auxVec[j+1];
+    for(int j=i; j<int(auxVec.size())-1; j++){
+            auxVec[j] = auxVec[j+1];
+    }
 
     return auxVec;
 }
@@ -174,52 +160,117 @@ void Digraph:: dfsR(int v, bool* marked, bool* onStack, queue<int>* fila){
     marked[v] = true;
     vector<Node*> auxVec = this->nodes[v]->conectedNodes;
     int auxCount = this->nodes[v]->listSize; 
-
     fila->push(v);
 
-    int save = this->nodes[v]->listSize;
 
     for(int w=0; w<this->nodes[v]->listSize; w++){
-        //cout << v << endl << endl;
-        //cout << "pai " << v << " " << this->nodes[v]->listSize << endl;
-        //cout << "filho " << this->nodes[v]->conectedNodes[w]->vertex << endl;
-        //cout << "topo " << fila->front() << endl;
-        
         if(!marked[this->nodes[v]->conectedNodes[w]->vertex]){
             dfsR(this->nodes[v]->conectedNodes[w]->vertex, marked, onStack, fila);
         }
 
         else if(onStack[w] || fila->front() == this->nodes[v]->conectedNodes[w]->vertex){
-            //cout << "--removemos " << this->nodes[v]->vertex << " -> " << this->nodes[v]->conectedNodes[w]->vertex << endl;
             for(int k=0; k<auxCount; k++){
                 if(auxVec[k]->vertex == this->nodes[v]->conectedNodes[w]->vertex){
                     auxVec = fixConnectedNodes(auxVec, k);
                     break;
                 }
             }
-
             auxCount--;
-            //fila->pop();
-            
         }
-
-
-
-        //cout << "------------" << endl << endl;
-
-
-    
     }
 
     onStack[v] = false;
+    fila->pop();
 
     this->nodes[v]->conectedNodes = auxVec;
     this->nodes[v]->listSize = auxCount;
 
-    //marked[v] = false;
+}
 
-    fila->pop();
+void Digraph:: getPath(){
+    bool* marked = new bool[this->V];
+    int* ini = new int[this->V];
+    int* fim = new int[this->V]; 
+    int count = 0;
 
+    // inicializa todos os nós como não visitados
+    for(int i=0; i<this->V; i++){
+        marked[i] = false;
+        ini[i] = 0;
+        fim[i] = 0;
+    }
+
+    // dfs para a realização do topological sorting
+    for(int v=0; v<this->V; v++){
+        if(!marked[v])
+            topologicalS(v, ini, fim, marked, &count);
+    }
+
+    // ordena de forma decrescente os tempos
+    int* sortFim = new int[this->V];
+    for(int i=0; i<this->V; i++)
+        sortFim[i] = fim[i];
+
+    sort(sortFim, sortFim+this->V, greater<int>());
+
+    Node** res = new Node*[this->V];
+
+    for(int v=0; v<this->V; v++){
+        int help = fim[v];
+
+        for(int i=0; i<this->V; i++){
+            if(sortFim[i] == help){
+                res[i] = this->nodes[v];
+                break;
+            }
+        }
+    }
+
+    // junta as palvras
+    // isso daqui ta funcionando
+    for(int i=0; i<this->V; i++){
+        int j = 0, k = 0, save = 0;
+
+        if(i < this->V-1){
+            while(j < int(size(res[i]->sequence)) && res[i]->sequence[j] != res[i+1]->sequence[k])
+                j++;
+
+            save = j;
+
+            while(j < int(size(res[i]->sequence)) && k < int(size(res[i+1]->sequence))){
+                if(res[i]->sequence[j] == res[i+1]->sequence[k]){
+                    j++;
+                    k++;
+                }
+                else{
+                    k=0;
+                    save++;
+                    j = save;
+                }
+            }
+
+        }
+
+        for(int m=0; m<int(size(res[i]->sequence))-k; m++){
+            cout << res[i]->sequence[m];
+        }
+    }
+    cout << endl;
+}
+
+void Digraph:: topologicalS(int v, int* ini, int* fim, bool* marked, int* count){
+    marked[v] = true;
+    ini[v] = *(count);
+
+    for(int j=0; j<this->nodes[v]->listSize; j++){
+        int w = this->nodes[v]->conectedNodes[j]->vertex;
+
+        if(!marked[w])
+            topologicalS(w, ini, fim, marked, count);
+    }
+
+    *(count)+= 1;
+    fim[v] = *(count);
 }
 
 

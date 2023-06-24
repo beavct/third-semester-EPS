@@ -12,16 +12,8 @@ int main(){
     Digraph* G = new Digraph;
 
     G->readDigraph();
-
-    //G->teste();
-
-    //cout << endl << "vamos retirar os ciclos" << endl << endl;
-
     G->Cycle();
-
-    G->teste();
-
-
+    G->getPath();
 
     return 0;
 }

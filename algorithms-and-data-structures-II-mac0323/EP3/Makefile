@@ -1,5 +1,5 @@
 PP=g++
-COMPFLAGS= -Wall -g
+COMPFLAGS= -Wall -g -O2
 OTHERS= digraph.cpp
 
 ###################################################################################
