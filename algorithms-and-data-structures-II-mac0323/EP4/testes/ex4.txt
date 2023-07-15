@@ -1,0 +1,4 @@
+(([a-z])*|([0-9])*)*@(([a-z])+\.)+br
+2
+cef1999@ime.usp.br
+thilio@bbb.com

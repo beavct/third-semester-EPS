@@ -1,0 +1,5 @@
+A*AB
+3
+A
+AB
+AAAB

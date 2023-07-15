@@ -1,0 +1,6 @@
+(.)*A(.)*
+4
+AAAAAAAAA
+BCA
+AAAAABBBBBB
+BBB
