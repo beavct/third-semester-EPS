@@ -1,0 +1,316 @@
+<Gerenciador>:
+    Menu:
+        name: 'menu'
+    PhysicsScreen:
+        name: 'physicsScreen'
+    MenuPlota:
+        name: 'menuPlota'
+    MUScreen:
+        name: 'mu'
+    MUVScreen:
+        name: 'muv'
+    QuedaLivreScreen:
+        name: 'quedaLivre'
+    
+<Menu>:
+    BoxLayout:
+        orientation:'vertical'
+        padding:200
+        spacing:50
+        Button:
+            text:'Acelerometro'
+            background_color: 0, 0, 1, 1
+            on_release:app.root.current = 'physicsScreen'
+        Button:
+            text: 'Plotar'
+            background_color: 0, 0, 1, 1
+            on_release:app.root.current = 'menuPlota'
+        Button:
+            text:'Sair'
+            background_color: 1, 0, 0, 1
+            on_release:app.stop()
+
+<MenuPlota>:
+    id: MenuPlota
+    BoxLayout:
+        ActionBar:
+            pos_hint: {'top':1}
+            ActionView:
+                ActionPrevious:
+                    title:'Plotagem'
+                    on_release:app.root.current = 'menu'
+                ActionButton:
+                    text:'Sair'
+                    on_release:app.stop()   
+    BoxLayout:
+        orientation:'vertical'
+        spacing:100
+        padding:130
+        Button:
+            text: 'Movimento retilíneo uniforme'
+            background_color: 0, 1, 0, 1
+            on_release:app.root.current = 'mu'
+        Button:
+            text: 'Movimento retilíneo uniformemente variado'
+            background_color: 0, 1, 0, 1
+            on_release:app.root.current = 'muv'
+        Button:
+            text: 'Queda livre'
+            background_color: 0, 1, 0, 1
+            on_release:app.root.current = 'quedaLivre'
+
+<MU>:
+    id: MU
+    orientation: 'vertical'
+    ActionBar:
+        pos_hint: {'top':1}
+        ActionView:
+            ActionPrevious:
+                title:'Movimento retilíneo uniforme'
+                on_release:app.root.current = 'menuPlota'
+            ActionButton:
+                text:'Sair'
+                on_release:app.stop()  
+    BoxLayout:
+        id: graph
+        orientation: 'vertical'
+        size_hint_x: 1
+        size_hint_y: 1
+    BoxLayout:
+        size: root.width, root.height
+        size_hint_x: 1
+        size_hint_y: .1
+        #background_color: 0, 1, 0, 1
+        orientation: 'horizontal'
+        BoxLayout:
+            orientation: 'vertical'
+            TextInput:
+                id: tempoMU
+            Button:
+                text: 'Tempo total (s)'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.addTempoMU()
+        BoxLayout:
+            orientation: 'vertical'
+            TextInput:
+                id: passosMU
+            Button:
+                text: 'Quant. de passos'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.addPassosMU()
+        BoxLayout:
+            orientation: 'vertical'
+            TextInput:
+                id: tamPassosMU
+            Button:
+                text: 'Tam. dos passos (m)'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.addTamPassosMU()
+        BoxLayout:
+            Button:
+                text: 'Gerar gráfico'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.gerarGraficoMU()
+
+<MUV>:
+    id: MUV
+    orientation: 'vertical'
+    ActionBar:
+        pos_hint: {'top':1}
+        ActionView:
+            ActionPrevious:
+                title:'Movimento retilíneo uniformemente variado'
+                on_release:app.root.current = 'menuPlota'
+            ActionButton:
+                text:'Sair'
+                on_release:app.stop()  
+    BoxLayout:
+        id: graph
+        orientation: 'vertical'
+        size_hint_x: 1
+        size_hint_y: 1
+    BoxLayout:
+        size: root.width, root.height
+        size_hint_x: 1
+        size_hint_y: .1
+        #background_color: 0, 1, 0, 1
+        orientation: 'horizontal'            
+        BoxLayout:
+            orientation: 'vertical'
+            TextInput:
+                id: tempoMUV
+            Button:
+                text: 'Tempo total (s)'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.addTempoMUV()
+        BoxLayout:
+            orientation: 'vertical'
+            TextInput:
+                id: passosMUV
+            Button:
+                text: 'Quant. de passos'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.addPassosMUV()
+        BoxLayout:
+            orientation: 'vertical'
+            TextInput:
+                id: tamPassosMUV
+            Button:
+                text: 'Tam. dos passos (m)'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.addTamPassosMUV()
+        BoxLayout:
+            Button:
+                text: 'Gerar gráfico'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.gerarGraficoMUV()
+
+<QuedaLivre>:
+    id: QuedaLivre
+    orientation: 'vertical'
+    ActionBar:
+        pos_hint: {'top':1}
+        ActionView:
+            ActionPrevious:
+                title:'Queda Livre'
+                on_release:app.root.current = 'menuPlota'
+            ActionButton:
+                text:'Sair'
+                on_release:app.stop()  
+    BoxLayout:
+        id: graph
+        orientation: 'vertical'
+        #size: root.width/2, root.height/2
+        #size_hint: 0.7, 1
+        #spacing: 5
+    BoxLayout:
+        size: root.width, root.height
+        size_hint_x: 1
+        size_hint_y: .1
+        #background_color: 0, 1, 0, 1
+        orientation: 'horizontal'            
+        BoxLayout:
+            orientation: 'vertical'
+            TextInput:
+                id: tempoQuedaLivre
+            Button:
+                text: 'Tempo total (s)'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.addTempoQuedaLivre()
+        BoxLayout:
+            orientation: 'vertical'
+            TextInput:
+                id: alturaQuedaLivre
+            Button:
+                text: 'Altura (m)'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.addAlturaQuedaLivre()
+        BoxLayout:
+            Button:
+                text: 'Gerar gráfico'
+                font_size: 30
+                background_color: 0, 1, 0, 1
+                on_release: root.gerarGraficoQuedaLivre()
+
+<Physics>:
+    id: physics
+    orientation:'vertical'
+    ActionBar:
+        ActionView:
+            ActionPrevious:
+                title:'Acelerometro'
+                on_release:app.root.current = 'menu'
+            ActionButton:
+                text:'Sair'
+                on_release:app.stop()
+    BoxLayout:
+        size: root.size
+        size_hint_x: 1
+        size_hint_y: 1
+        BoxLayout:
+            orientation: 'vertical'
+            size: root.width, root.height
+            #padding: 20
+            spacing: 10
+            BoxLayout:
+                id:coords
+                size_hint_y: .05
+                orientation:'horizontal'
+                color: 1,1,1,1
+
+            BoxLayout:
+                id: box
+                size_hint_y: .85
+                size_hint_x: 1
+                pos_hint: {'top': 1,'right' : 1}
+                color: 0,0,0,0
+
+
+            BoxLayout:
+                size_hint_y: .1
+                pos_hint: {'top': 1}
+                color: 1,1,1,1
+
+                Button:
+                    id: startGrafico
+                    text: 'Start'
+                    font_size: 32
+                    on_release: root.start()
+                    disabled: False
+
+                Button:
+                    id: stopGrafico
+                    text: 'Stop'
+                    font_size: 32
+                    on_release: root.stop()
+
+                Button:
+                    id: clearGrafico
+                    text: 'Clear'
+                    font_size: 32
+                    on_release: root.clear_plot()
+                Button:
+                    id: saveGrafico
+                    text: 'Save'
+                    font_size: 32
+                    on_release:
+                        root.stop()
+                        root.save()
+                        root.show_popup()
+
+<Aviso1>:
+    size_hint: .5, .2
+    auto_dismiss: False
+    title: 'Dados armazenados com sucesso!'
+    title_align: 'center'
+    Button:
+        text:'Fechar'
+        on_release: root.dismiss()
+
+<Aviso2>:
+    size_hint: .5, .2
+    auto_dismiss: False
+    title: 'Não há nenhum dado salvo.'
+    title_align: 'center'
+    Button:
+        text:'Fechar'
+        on_release: root.dismiss()
+
+<Aviso3>:
+    size_hint: .5, .2
+    auto_dismiss: False
+    title: 'Dados carregados com sucesso'
+    title_align: 'center'
+    Button:
+        text:'Fechar'
+        on_release: root.dismiss()
