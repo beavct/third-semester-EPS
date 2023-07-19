@@ -21,7 +21,7 @@ AUX=0
         TEMPO=$(echo "${TEMPO}/10" | bc -l) 
 
         echo -e "\nRESULTADO DOS TESTES\n" 
-        echo -e "grid_size = $2\nnum_threads = $3\n" 
+        echo -e "grid_size = $2\nnum_threads = $3\nmétodo = $4\n" 
         echo -e "tempo = $TEMPO"
     fi
 
