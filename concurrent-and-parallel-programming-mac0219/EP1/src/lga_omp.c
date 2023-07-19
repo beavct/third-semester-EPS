@@ -31,9 +31,9 @@ static byte get_next_cell(int i, int j, byte *grid_in, int grid_size) {
 }
 
 static void update(byte *grid_in, byte *grid_out, int grid_size) {
+    // com esse for foi mais rápido do que o sequencial para grid_size grandes e está correto
+    #pragma omp parallel for
     for (int i = 0; i < grid_size; i++) {
-        #pragma omp parallel for
-        // com esse for foi mais rápido do que o sequencial para grid_size grandes e está correto
         for (int j = 0; j < grid_size; j++) {
             if (grid_in[ind2d(i,j)] == WALL)
                 grid_out[ind2d(i,j)] = WALL;
