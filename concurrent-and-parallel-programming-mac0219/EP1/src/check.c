@@ -65,7 +65,7 @@ bool are_grids_equal(byte* grid_a, byte* grid_b, int grid_size) {
     for (int idx = 0; idx < grid_size*grid_size; idx++)
         if (grid_a[idx] != grid_b[idx])
             return false;
-    
+
     return true;
 }
 
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
         printf("Resultado OpenMP igual ao sequencial\n");
     else
         printf("Resultado OpenMP DIFERENTE do sequencial\n");
-    
+
     printf("Executando versao Pthreads...\n");
     initialize_grids(grid_1, grid_2, grid_size);
     simulate_pth(grid_1, grid_2, grid_size, num_threads);

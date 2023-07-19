@@ -6,7 +6,7 @@
 
 #define DENSITY 0.05
 
-// Procedimento auxiliar para inicializar o gerador de 
+// Procedimento auxiliar para inicializar o gerador de
 // numeros pseudo-aleatorios (PRNG).
 // Utiliza-se o Unix time em microssegundos (us) como seed.
 void initialize_prng(void)
@@ -22,7 +22,7 @@ void initialize_prng(void)
 
 void generate_grid(byte *grid, int grid_size) {
     int dir;
-    
+
     for (int i = 0; i < grid_size; i++) {
         for (int j = 0; j < grid_size; j++) {
             if (i == 0 || j == 0 || i == grid_size - 1 || j == grid_size - 1) {

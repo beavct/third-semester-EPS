@@ -72,55 +72,84 @@ void initialize_grids(byte *grid_1, byte *grid_2, int grid_size) {
     }
 }
 
+// Verifica se a particula esta indo para um dos cantos entre duas paredes
+bool is_corner(int i, int j, byte *grid_in, int grid_size, int dir) {
+    if (dir == 0 || dir == 3)
+        return false;
+    if (dir == 1) {
+        return (!inbounds(i-2, j, grid_size) || grid_in[ind2d(i-2,j)] == WALL) &&
+            (!inbounds(i, j+1, grid_size) || grid_in[ind2d(i,j+1)] == WALL);
+    }
+    if (dir == 2) {
+        return (!inbounds(i-2, j, grid_size) || grid_in[ind2d(i-2,j)] == WALL) &&
+            (!inbounds(i, j-1, grid_size) || grid_in[ind2d(i,j-1)] == WALL);
+    }
+    if (dir == 4) {
+        return (!inbounds(i+2, j, grid_size) || grid_in[ind2d(i+2,j)] == WALL) &&
+            (!inbounds(i, j-1, grid_size) || grid_in[ind2d(i,j-1)] == WALL);
+    }
+    if (dir == 5) {
+        return (!inbounds(i+2, j, grid_size) || grid_in[ind2d(i+2,j)] == WALL) &&
+            (!inbounds(i, j+1, grid_size) || grid_in[ind2d(i,j+1)] == WALL);
+    }
+
+    return false;
+}
+
 // Tentativa de implementar uma colisao um pouco mais realista com
-// as paredes, que nao seja apenas uma reflexao simples
-void wall_collision(int i, int j, byte *grid_out, int grid_size, int dir) {
-    // Reflexao simples:
-    // byte dir_mask = 0x01 << dir;
-    // grid_out[ind2d(i,j)] |= ((dir_mask << 3) | (dir_mask >> 3)) % WALL;
+// as paredes, buscando conservar o momento na direcao paralela a parede.
+// Verifica se houve colisao com a parede que possa levar uma nova particula
+// ateh a celula (i,j). Nesse caso, retorna a direcao dessa nova particula em (i,j).
+// Assume paredes no grid na vertical ou na horizontal, nao na diagonal ou celulas isoladas.
+byte from_wall_collision(int i, int j, byte *grid_in, int grid_size, int dir) {
+    // rev_dir: direcao oposta a dir
+    int rev_dir = (dir + NUM_DIRECTIONS/2) % NUM_DIRECTIONS;
+    byte rev_dir_mask = 0x01 << rev_dir;
 
     if (dir == 0) {
-        grid_out[ind2d(i,j)] |= 0x08;
+        if (grid_in[ind2d(i,j)] & 0x01)
+            return rev_dir_mask;
     }
     else if (dir == 1) {
-        if (inbounds(i-2, j, grid_size) && grid_out[ind2d(i-2,j)] != WALL)
-            grid_out[ind2d(i-2,j)] |= 0x04;
-        else if (inbounds(i, j+1, grid_size) && grid_out[ind2d(i,j+1)] != WALL)
-            grid_out[ind2d(i,j+1)] |= 0x20;
-        else
-            grid_out[ind2d(i,j)] |= 0x10;
+        if (inbounds(i-2, j, grid_size) && (grid_in[ind2d(i-2,j)] & 0x20))
+            return rev_dir_mask;
+        if (inbounds(i, j+1, grid_size) && (grid_in[ind2d(i,j+1)] & 0x04))
+            return rev_dir_mask;
 
     } else if (dir == 2) {
-        if (inbounds(i-2, j, grid_size) && grid_out[ind2d(i-2,j)] != WALL)
-            grid_out[ind2d(i-2,j)] |= 0x02;
-        else if (inbounds(i, j-1, grid_size) && grid_out[ind2d(i,j-1)] != WALL)
-            grid_out[ind2d(i,j-1)] |= 0x10;
-        else
-            grid_out[ind2d(i,j)] |= 0x20;
+        if (inbounds(i-2, j, grid_size) && (grid_in[ind2d(i-2,j)] & 0x10))
+            return rev_dir_mask;
+        if (inbounds(i, j-1, grid_size) && (grid_in[ind2d(i,j-1)] & 0x02))
+            return rev_dir_mask;
 
     } else if (dir == 3) {
-        grid_out[ind2d(i,j)] |= 0x01;
+        if (grid_in[ind2d(i,j)] & 0x08)
+            return rev_dir_mask;
 
     } else if (dir == 4) {
-        if (inbounds(i+2, j, grid_size) && grid_out[ind2d(i+2,j)] != WALL)
-            grid_out[ind2d(i+2,j)] |= 0x20;
-        else if (inbounds(i, j-1, grid_size) && grid_out[ind2d(i,j-1)] != WALL)
-            grid_out[ind2d(i,j-1)] |= 0x04;
-        else
-            grid_out[ind2d(i,j)] |= 0x02;
+        if (inbounds(i+2, j, grid_size) && (grid_in[ind2d(i+2,j)] & 0x04))
+            return rev_dir_mask;
+        if (inbounds(i, j-1, grid_size) && (grid_in[ind2d(i,j-1)] & 0x20))
+            return rev_dir_mask;
 
-    } else if (dir == 5) {
-        if (inbounds(i+2, j, grid_size) && grid_out[ind2d(i+2,j)] != WALL)
-            grid_out[ind2d(i+2,j)] |= 0x10;
-        else if (inbounds(i, j+1, grid_size) && grid_out[ind2d(i,j+1)] != WALL)
-            grid_out[ind2d(i,j+1)] |= 0x02;
-        else
-            grid_out[ind2d(i,j)] |= 0x04;
+    } if (dir == 5) {
+        if (inbounds(i+2, j, grid_size) && (grid_in[ind2d(i+2,j)] & 0x02))
+            return rev_dir_mask;
+        if (inbounds(i, j+1, grid_size) && (grid_in[ind2d(i,j+1)] & 0x10))
+            return rev_dir_mask;
     }
+
+    // Literalmente um "corner case": evita que uma particula desapareca
+    // quando ela colide na quina entre duas paredes
+    byte dir_mask = 0x01 << dir;
+    if ((grid_in[ind2d(i,j)] & dir_mask) && is_corner(i, j, grid_in, grid_size, dir))
+        return rev_dir_mask;
+
+    return EMPTY;
 }
 
 // Logica de colisao entre particulas de acordo com o modelo
-byte particles_collision(byte cell) {
+byte check_particles_collision(byte cell) {
     switch (cell) {
         // Colisao entre duas particulas
         case 0x09:
@@ -172,7 +201,7 @@ void print_grid(byte *grid, int grid_size) {
     }
 }
 
-// Imprime o estado atual da simulacao para gerar uma 
+// Imprime o estado atual da simulacao para gerar uma
 // animacao ASCII da simulacao
 void print_grid_animation(byte *grid, int grid_size) {
     for (int i = 0; i < grid_size; i++) {

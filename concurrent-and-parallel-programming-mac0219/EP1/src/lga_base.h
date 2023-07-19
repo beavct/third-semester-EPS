@@ -41,7 +41,9 @@ inline bool inbounds(int i, int j, int grid_size);
 
 void wall_collision(int i, int j, byte *grid_out, int grid_size, int dir);
 
-byte particles_collision(byte cell);
+byte from_wall_collision(int i, int j, byte *grid_in, int grid_size, int dir);
+
+byte check_particles_collision(byte cell);
 
 void print_grid(byte *grid, int grid_size);
 

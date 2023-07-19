@@ -69,7 +69,7 @@ void parse_arguments(int argc, char *argv[], int *grid_size_ptr, int *impl_ptr, 
         exit(EXIT_FAILURE);
     }
 
-    
+
     if (*grid_size_ptr < MIN_GRID_SIZE || *grid_size_ptr > MAX_GRID_SIZE) {
         printf("Invalid grid_size %d (min=%d, max=%d)\n",
             *grid_size_ptr, MIN_GRID_SIZE, MAX_GRID_SIZE);
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
     byte *grid_2;
     int grid_size, impl, num_threads;
     struct timeval t1, t2, t3;
-    
+
     parse_arguments(argc, argv, &grid_size, &impl, &num_threads);
 
     grid_1 = allocate_grid(grid_size);
@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
     gettimeofday(&t2, NULL);
 
     timeval_subtract(&t3, &t2, &t1);
-    
+
     printf("%lu.%06lu\n", t3.tv_sec, t3.tv_usec);
 
     free(grid_1);
