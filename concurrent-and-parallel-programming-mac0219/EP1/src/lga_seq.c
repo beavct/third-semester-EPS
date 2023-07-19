@@ -21,7 +21,6 @@ static byte get_next_cell(int i, int j, byte *grid_in, int grid_size) {
         int n_j = j + dj;
 
         // Verifica se o vizinho esta dentro do grid
-        // impede a modificação de um mesmo elemento x por várias threads
         if (inbounds(n_i, n_j, grid_size)) {
 
             // Se o vizinho for parede, eh possivel que apareca

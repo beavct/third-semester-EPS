@@ -1,11 +1,13 @@
 #include "lga_base.h"
 #include "lga_omp.h"
+//#include <omp.h>
 
 static byte get_next_cell(int i, int j, byte *grid_in, int grid_size) {
     byte next_cell = EMPTY;
     omp_set_num_threads(NUM_DIRECTIONS);
-
-    #pragma omp parallel for
+    //omp_set_num_threads(NUM_DIRECTIONS); : 1 
+    // 1 - queria tentar fazer uma thread pra cada direção, mas n deu certo não
+    //#pragma omp parallel for: 1 - isso daqui deixou muito lerdo, nem testei se deixava certo
     for (int dir = 0; dir < NUM_DIRECTIONS; dir++) {
         int rev_dir = (dir + NUM_DIRECTIONS/2) % NUM_DIRECTIONS;
         byte rev_dir_mask = 0x01 << rev_dir;
