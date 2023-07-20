@@ -45,3 +45,4 @@ void simulate_omp(byte *grid_1, byte *grid_2, int grid_size, int num_threads) {
         update(grid_1, grid_2, grid_size, num_threads);
         update(grid_2, grid_1, grid_size, num_threads);
     }
+}

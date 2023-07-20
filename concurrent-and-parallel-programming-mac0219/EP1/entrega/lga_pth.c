@@ -3,19 +3,19 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-
 pthread_mutex_t lock;
 double max = -1;
 
 struct task {
-    byte *g_in;
-    byte *g_out;
-    int g_min;
-    int g_max;
-    int g_size;
-    int n_threads;
+    byte *g_in; //grid in
+    byte *g_out; // grid out
+    int g_min; //
+    int g_max; //
+    int g_size; // tamanho das grids
+    int n_threads; // quantidade de threads
 };
 
+// sem alteração
 static byte get_next_cell(int i, int j, byte *grid_in, int grid_size) {
     byte next_cell = EMPTY;
 
@@ -58,7 +58,7 @@ void * teste(void *arg){
 static void update(byte *grid_in, byte *grid_out, int grid_size, int num_threads,struct task* tasks) {
     pthread_t *threads;
     threads = malloc(num_threads * sizeof(pthread_t));
-    for (int i = 0; i < num_threads; i++) {
+    for (int i = 0; i < num_threads; i++) { // mesma alteração feita no omṕ
         tasks[i].g_in = grid_in;
         tasks[i].g_out = grid_out;
         pthread_create(&threads[i], NULL, teste, (void*)&tasks[i]);

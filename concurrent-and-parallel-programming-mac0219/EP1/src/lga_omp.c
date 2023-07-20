@@ -1,13 +1,10 @@
 #include "lga_base.h"
 #include "lga_omp.h"
-//#include <omp.h>
+#include <omp.h>
 
 static byte get_next_cell(int i, int j, byte *grid_in, int grid_size) {
     byte next_cell = EMPTY;
-    omp_set_num_threads(NUM_DIRECTIONS);
-    //omp_set_num_threads(NUM_DIRECTIONS); : 1 
-    // 1 - queria tentar fazer uma thread pra cada direção, mas n deu certo não
-    //#pragma omp parallel for: 1 - isso daqui deixou muito lerdo, nem testei se deixava certo
+
     for (int dir = 0; dir < NUM_DIRECTIONS; dir++) {
         int rev_dir = (dir + NUM_DIRECTIONS/2) % NUM_DIRECTIONS;
         byte rev_dir_mask = 0x01 << rev_dir;
@@ -30,8 +27,8 @@ static byte get_next_cell(int i, int j, byte *grid_in, int grid_size) {
     return check_particles_collision(next_cell);
 }
 
-static void update(byte *grid_in, byte *grid_out, int grid_size) {
-    // com esse for foi mais rápido do que o sequencial para grid_size grandes e está correto
+static void update(byte *grid_in, byte *grid_out, int grid_size, int num_threads) {
+    omp_set_num_threads(num_threads);
     #pragma omp parallel for
     for (int i = 0; i < grid_size; i++) {
         for (int j = 0; j < grid_size; j++) {
@@ -45,7 +42,7 @@ static void update(byte *grid_in, byte *grid_out, int grid_size) {
 
 void simulate_omp(byte *grid_1, byte *grid_2, int grid_size, int num_threads) {
     for (int i = 0; i < ITERATIONS/2; i++) {
-        update(grid_1, grid_2, grid_size);
-        update(grid_2, grid_1, grid_size);
+        update(grid_1, grid_2, grid_size, num_threads);
+        update(grid_2, grid_1, grid_size, num_threads);
     }
 }
