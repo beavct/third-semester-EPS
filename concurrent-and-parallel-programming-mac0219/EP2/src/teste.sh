@@ -14,7 +14,7 @@ AUX=0
         echo -e "\nRESULTADO DOS TESTES\n" >> resultados.txt
 
         echo -e "\narray_size= 2^10\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -22,16 +22,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 1024 [--root $2] [--custom])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 1024 [--root $2] [--custom] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -43,7 +43,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^11\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -51,16 +51,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 2048 [--root $2] [--custom])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 2048 [--root $2] [--custom] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -71,7 +71,7 @@ AUX=0
 
         let NP=1
         echo -e "\narray_size= 2^12\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -79,16 +79,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 4096 [--root $2] [--custom])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 4096 [--root $2] [--custom] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -100,7 +100,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^13\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -108,16 +108,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 8192 [--root $2] [--custom])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 8192 [--root $2] [--custom] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -129,7 +129,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^14\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -137,16 +137,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 16384 [--root $2] [--custom])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 16384 [--root $2] [--custom] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -158,7 +158,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^15\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -166,16 +166,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 32768 [--root $2] [--custom])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 32768 [--root $2] [--custom] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -187,7 +187,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^16\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -195,16 +195,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 65536 [--root $2] [--custom])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 65536 [--root $2] [--custom] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -216,7 +216,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^17\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -224,16 +224,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 131072 [--root $2] [--custom])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 131072 [--root $2] [--custom] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -245,10 +245,10 @@ AUX=0
         let NP=1
 
     elif [ $1 == 0 ]; then
-           echo -e "\nRESULTADO DOS TESTES\n" >> resultados.txt
+        echo -e "\nRESULTADO DOS TESTES \n" >> resultados.txt
 
         echo -e "\narray_size= 2^10\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -256,16 +256,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 1024 [--root $2])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 1024 [--root $2] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -277,7 +277,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^11\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -285,16 +285,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 2048 [--root $2])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 2048 [--root $2] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -305,7 +305,7 @@ AUX=0
 
         let NP=1
         echo -e "\narray_size= 2^12\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -313,16 +313,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 4096 [--root $2])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 4096 [--root $2] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -334,7 +334,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^13\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -342,16 +342,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 8192 [--root $2])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 8192 [--root $2] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -363,7 +363,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^14\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -371,16 +371,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 16384 [--root $2])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 16384 [--root $2] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -392,7 +392,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^15\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -400,16 +400,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 32768 [--root $2])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 32768 [--root $2] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -421,7 +421,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^16\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -429,16 +429,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 65536 [--root $2])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 65536 [--root $2] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
@@ -450,7 +450,7 @@ AUX=0
         let NP=1
 
         echo -e "\narray_size= 2^17\n" >> resultados.txt
-        while [ $NP -le 32 ]; do
+        while [ $NP -le 8 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -458,16 +458,16 @@ AUX=0
 
                 if [ $NP -le 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 131072 [--root $2])
-                elif; then
+                elif [ $NP -gt 8 ];then
                     AUX=$(mpirun -np ${NP} ./broadcast --array_size 131072 [--root $2] --use-hwthread-cpus)
                 fi
 
-                echo $(echo ${AUX} | tr '.' ',') >> resultados.txt
+                echo -e ${AUX}"\n" >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
             MEDIA=$(echo "${TEMPO}/10" | bc -l)
-            echo -e $(echo "tempo = $MEDIA\n" | tr '.' ',') >> resultados
+            echo -e "media = "$MEDIA"\n" >> resultados.txt
 
             let TEMPO=0 #ok
             let AUX=0 #ok
