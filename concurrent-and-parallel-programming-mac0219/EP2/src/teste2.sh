@@ -11,7 +11,7 @@ AUX=0
 SIZES=(1024 2048 4096 8192 16384 32768 65536 131072)
 ISCUSTOM=""
 
-    if [$1 == 1]; then
+    if [ $1 -eq 1 ]; then
         ISCUSTOM="[--custom]"
     fi
     
