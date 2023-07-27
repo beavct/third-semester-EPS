@@ -24,7 +24,7 @@ ISCUSTOM=""
         echo -e "\narray_size= $size\n" >> resultados.txt
 
         let NP=1
-        while [ $NP -le 8 ]; do
+        while [ $NP -le 32 ]; do
 
             echo -e "\nnp= "${NP} "\n" >> resultados.txt
 
@@ -36,7 +36,7 @@ ISCUSTOM=""
                     AUX=$(mpirun --oversubscribe -np ${NP} ./broadcast --array_size 1024 [--root $2] ${ISCUSTOM})
                 fi
 
-                echo -e ${AUX}"\n" >> resultados.txt
+                echo -e ${AUX} >> resultados.txt
                 TEMPO=$(echo "${TEMPO}+${AUX}" | bc -l)
             done
 
