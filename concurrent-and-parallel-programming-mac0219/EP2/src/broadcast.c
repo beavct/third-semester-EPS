@@ -86,13 +86,12 @@ int custom_bcast(
     MPI_Comm comm ) {
 
 
-    int ra,si;
+    int ra,si,i;
     MPI_Status status;
     MPI_Comm_rank(comm, &ra);
     MPI_Comm_size(comm, &si);
 
     if (ra == root) {
-        int i;
         for (i = 0; i < si; i++) {
             if (i != ra) {//manda "mensagem" para todo mundo que n seja a raiz
                 MPI_Send(buffer, count, datatype, i, 0, comm);
