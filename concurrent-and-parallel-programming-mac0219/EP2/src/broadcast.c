@@ -85,7 +85,24 @@ int custom_bcast(
     int root,
     MPI_Comm comm ) {
 
-    // SEU CODIGO DO EP2 AQUI
+
+    int ra,si;
+    MPI_Status status;
+    MPI_Comm_rank(comm, &ra);
+    MPI_Comm_size(comm, &si);
+
+    if (ra == root) {
+        int i;
+        for (i = 0; i < si; i++) {
+            if (i != ra) {//manda "mensagem" para todo mundo que n seja a raiz
+                MPI_Send(buffer, count, datatype, i, 0, comm);
+            }
+        }
+    }
+    else { //recebem a mensagem enviada da raiz
+        MPI_Recv(buffer, count, datatype, root, 0, comm, &status);
+        
+    }
 
     return MPI_SUCCESS;
 }
